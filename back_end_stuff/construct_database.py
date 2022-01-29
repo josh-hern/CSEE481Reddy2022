@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DATETIME, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
+
 Base = declarative_base()
 
 
@@ -38,7 +39,10 @@ class AttackTable(Base):
     hit = Column('hit', Boolean)
 
 
-engine = create_engine('sqlite:///../database/battleship_database.db', echo=True)
+engine = create_engine('sqlite:///../database/battleship_database.db')
 Base.metadata.create_all(bind=engine)
 Session = sessionmaker(bind=engine)
 
+if __name__ == "__main__":
+    from database_query_insert import initialization
+    initialization()
