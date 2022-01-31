@@ -44,7 +44,7 @@ def create_tables():
 
 
 if __name__ == "__main__":
-    from database_query_insert import initialization
+    from database_query_insert import Initialization
     create_tables()
-    initialization()
+    Initialization()
 

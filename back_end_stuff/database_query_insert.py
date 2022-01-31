@@ -2,8 +2,8 @@
 This file will be for handling database insertions (not initialization, but data after this occurs
 """
 from construct_database import ShipDesignation
-from sqlalchemy import create_engine, insert
-from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 
 class Initialization:
