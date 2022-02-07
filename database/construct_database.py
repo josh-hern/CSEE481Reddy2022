@@ -29,6 +29,7 @@ class AttackMovesTable(Base):
 
     ID = Column('ID', Integer, primary_key=True)
     Position = Column('Position', String)
+    isHit = Column('isHit', Boolean)
 
 
 class OccupiedSpacesTable(Base):
