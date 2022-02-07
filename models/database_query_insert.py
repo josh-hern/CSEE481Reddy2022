@@ -1,7 +1,7 @@
 """
 This file will be for handling database insertions (not initialization, but data after this occurs
 """
-from construct_database import ShipDesignation
+from database.construct_database import ShipDesignation
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
