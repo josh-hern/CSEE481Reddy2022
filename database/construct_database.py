@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DATETIME, Boolean, TupleType
+from sqlalchemy import create_engine, Column, Integer, String, DATETIME, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -28,14 +28,14 @@ class AttackMovesTable(Base):
     __tablename__ = "AttackMoves"
 
     ID = Column('ID', Integer, primary_key=True)
-    Position = Column('Position', TupleType)
+    Position = Column('Position', String)
 
 
 class OccupiedSpacesTable(Base):
     __tablename__ = "OccupiedSpaces"
 
     ID = Column('ID', Integer, primary_key=True)
-    Position = Column('Position', TupleType)
+    Position = Column('Position', String)
     isHit = Column('isHit', Boolean)
 
 
@@ -45,7 +45,7 @@ def create_tables():
 
 
 if __name__ == "__main__":
-    from models.database_query_insert import Initialization
-    create_tables()
-    Initialization()
+    from models.database_query_insert import InitializationOfShips
 
+    create_tables()
+    InitializationOfShips()
