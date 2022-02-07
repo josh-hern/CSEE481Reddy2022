@@ -4,7 +4,7 @@ This file will be for handling database insertions (not initialization, but data
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from database.construct_database import ShipTable, PlayerTable
+import database
 
 
 class InitializationOfShips:
@@ -20,7 +20,7 @@ class InitializationOfShips:
 
     def create_carrier(self):
         session = self.sessionmaker_session()
-        carrier = ShipTable()
+        carrier = database.ShipTable()
         carrier.id = 1
         carrier.isSunk = False
         session.add(carrier)
@@ -29,7 +29,7 @@ class InitializationOfShips:
 
     def create_battleship(self):
         session = self.sessionmaker_session()
-        battleship = ShipTable()
+        battleship = database.ShipTable()
         battleship.id = 2
         battleship.isSunk = False
         session.add(battleship)
@@ -38,7 +38,7 @@ class InitializationOfShips:
 
     def create_cruiser(self):
         session = self.sessionmaker_session()
-        cruiser = ShipTable()
+        cruiser = database.ShipTable()
         cruiser.id = 3
         cruiser.isSunk = False
         session.add(cruiser)
@@ -47,7 +47,7 @@ class InitializationOfShips:
 
     def create_submarine(self):
         session = self.sessionmaker_session()
-        submarine = ShipTable()
+        submarine = database.ShipTable()
         submarine.id = 4
         submarine.isSunk = False
         session.add(submarine)
@@ -56,7 +56,7 @@ class InitializationOfShips:
 
     def create_destroyer(self):
         session = self.sessionmaker_session()
-        destroyer = ShipTable()
+        destroyer = database.ShipTable()
         destroyer.id = 5
         destroyer.isSunk = False
         session.add(destroyer)
@@ -74,7 +74,7 @@ class InitializationOfPlayers:
 
     def ready_player_one(self):
         session = self.sessionmaker_session()
-        player1 = PlayerTable()
+        player1 = database.PlayerTable()
         player1.ID = 1
         session.add(player1)
         session.commit()
@@ -82,7 +82,7 @@ class InitializationOfPlayers:
 
     def ready_player_two(self):
         session = self.sessionmaker_session()
-        player2 = PlayerTable()
+        player2 = database.PlayerTable()
         player2.ID = 2
         session.add(player2)
         session.commit()

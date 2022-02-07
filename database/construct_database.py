@@ -46,7 +46,7 @@ def create_tables():
 
 
 if __name__ == "__main__":
-    from models.database_query_insert import GeneralInitialization
+    import models
 
     create_tables()
-    GeneralInitialization()
+    models.GeneralInitialization()
