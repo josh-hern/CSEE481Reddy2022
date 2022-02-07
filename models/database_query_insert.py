@@ -95,3 +95,8 @@ class InitializationOfOccupiedSpaces:
     spaces or not
     """
     pass
+
+
+class GeneralInitialization:
+    InitializationOfShips()
+    InitializationOfPlayers()
