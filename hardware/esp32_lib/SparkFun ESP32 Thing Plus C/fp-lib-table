@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name "SparkFun ESP32 Thing Plus C")(type "KiCad")(uri "")(options "")(descr ""))
+)
