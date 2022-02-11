@@ -46,7 +46,7 @@ def create_tables():
 
 
 if __name__ == "__main__":
-    import models
+    import webview.models as models
 
     create_tables()
     models.GeneralInitialization()
