@@ -41,16 +41,22 @@ class GameConnector:
         attack_adder = database.AttackMovesTable()
         attack_adder.ID = json_decoded['player']
         attack_adder.Position = json_decoded['attack_space']
+        is_hit = self.check_space(json_decoded['attack_space'])
 
         pass
 
-    def check_space(self):
+    def check_space(self, space):
         """
         Checks if a space has already been attacked
 
         :return:
         :rtype:
         """
+        session = self.sessionmaker_session()
+        # Should call database_query_retrieve file?
+        occupied_spaces = database.OccupiedSpacesTable(self.database_location_sqlalchemy, space)
+
+        return False
         pass
 
     def add_ship_position(self):
