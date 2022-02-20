@@ -6,10 +6,12 @@ from sqlalchemy.orm import sessionmaker
 
 import infrastructure.database as database
 
+database_location = 'sqlite:///../../database/battleship_database.db'
+
 
 class InitializationOfShips:
     def __init__(self):
-        engine = create_engine('sqlite:///../database/battleship_database.db', echo=True)
+        engine = create_engine(database_location, echo=True)
         self.sessionmaker_session = sessionmaker(bind=engine)
 
         self.create_carrier()
@@ -66,7 +68,7 @@ class InitializationOfShips:
 
 class InitializationOfPlayers:
     def __init__(self):
-        engine = create_engine('sqlite:///../database/battleship_database.db', echo=True)
+        engine = create_engine(database_location, echo=True)
         self.sessionmaker_session = sessionmaker(bind=engine)
 
         self.ready_player_one()

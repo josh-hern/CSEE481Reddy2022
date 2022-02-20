@@ -41,12 +41,13 @@ class OccupiedSpacesTable(Base):
 
 
 def create_tables():
-    engine = create_engine('sqlite:///battleship_database.db')
+    engine = create_engine('sqlite:///../../database/battleship_database.db')
     Base.metadata.create_all(bind=engine)
 
 
 if __name__ == "__main__":
+    create_tables()
+
     import webview.models as models
 
-    create_tables()
     models.GeneralInitialization()
