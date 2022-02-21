@@ -1,11 +1,11 @@
-from flask import Blueprint
+from flask import Blueprint, render_template
 
-api = Blueprint('api', __name__)
+api = Blueprint('/api/', __name__)
 
-@api.route('/api/test')
+@api.route('/api/')
 def test():
     return 'hey'
 
-@api.route('/test')
-def testRoute():
-    return test()
+@api.route('/')
+def homeRoute():
+    return render_template('index.html', test=test())
