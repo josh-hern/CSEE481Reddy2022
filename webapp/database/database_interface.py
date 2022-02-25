@@ -12,7 +12,7 @@ class GameConnector:
     This class will handle game connections, and their usage with the database
     """
 
-    def __init__(self, database_location='///../database/battleship_database.db'):
+    def __init__(self, database_location='///battleship_database.db'):
         self.database_location_sqlalchemy = database_location
         engine = create_engine(f'sqlite:{self.database_location_sqlalchemy}', echo=True)
         self.sessionmaker_session = sessionmaker(bind=engine)

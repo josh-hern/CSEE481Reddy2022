@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker
 
 import construct_database as database
 
-database_location = 'sqlite:///../../database/battleship_database.db'
+database_location = 'sqlite:///battleship_database.db'
 
 
 class InitializationOfShips:
