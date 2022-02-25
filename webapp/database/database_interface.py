@@ -1,9 +1,10 @@
 """
 This file will be for operations involving the database
 """
-import infrastructure.database as database
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+
+import construct_database as database
 
 
 class GameConnector:

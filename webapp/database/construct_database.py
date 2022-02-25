@@ -48,6 +48,6 @@ def create_tables():
 if __name__ == "__main__":
     create_tables()
 
-    import webview.models as models
+    from database_query_insert import GeneralInitialization
 
-    models.GeneralInitialization()
+    GeneralInitialization()
