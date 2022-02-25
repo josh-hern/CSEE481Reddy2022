@@ -5,7 +5,7 @@ This file will be for handling database retrieval
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-import infrastructure.database as database
+import construct_database as database
 
 
 def get_occupied_spaces(database_location, space):
