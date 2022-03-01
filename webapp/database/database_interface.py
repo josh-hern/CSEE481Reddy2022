@@ -1,10 +1,10 @@
 """
 This file will be for operations involving the database
 """
-from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 import construct_database as database
+from database_query_retrieve import *
 
 
 class GameConnector:
@@ -37,13 +37,18 @@ class GameConnector:
         3b If space is not used, add a miss
         '''
 
-        session = self.sessionmaker_session()
         attack_adder = database.AttackMovesTable()
         attack_adder.ID = json_decoded['player']
         attack_adder.Position = json_decoded['attack_space']
         is_hit = self.check_space(json_decoded['attack_space'])
-
-        pass
+        if self.check_ship_sunk():
+            # Add attack move to table
+            print('you sunk {ship}!')
+        elif is_hit:
+            # Add attack move to table
+            print("hit!")
+        else:
+            print("miss!")
 
     def check_space(self, space):
         """
@@ -52,12 +57,8 @@ class GameConnector:
         :return:
         :rtype:
         """
-        session = self.sessionmaker_session()
-        from database_query_retrieve import get_space
         is_space_occupied = get_space(self.database_location_sqlalchemy, space)
-
         return is_space_occupied
-        pass
 
     def add_ship_position(self):
         """
@@ -67,6 +68,23 @@ class GameConnector:
         :rtype:
         """
         pass
+
+    def check_ship_sunk(self, space):
+        """
+        given a position, check if the ship at that position is sunk
+
+        :return:
+        :rtype:
+        """
+        database_row = get_space(self.database_location_sqlalchemy, space)
+        ship_id = database_row[0]
+        list_of_hits = get_similar_ship_id(self.database_location_sqlalchemy, ship_id)
+        for entry in list_of_hits:
+            if not entry[0]:
+                continue
+            else:
+                return True
+        return False
 
     @staticmethod
     def _decode_json(input_json):
