@@ -47,16 +47,16 @@ class GameConnector:
 
     def check_space(self, space):
         """
-        Checks if a space has already been attacked
+        Checks if a space has a ship in it
 
         :return:
         :rtype:
         """
         session = self.sessionmaker_session()
-        # Should call database_query_retrieve file?
-        occupied_spaces = database.OccupiedSpacesTable(self.database_location_sqlalchemy, space)
+        from database_query_retrieve import get_space
+        is_space_occupied = get_space(self.database_location_sqlalchemy, space)
 
-        return False
+        return is_space_occupied
         pass
 
     def add_ship_position(self):
