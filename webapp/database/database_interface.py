@@ -68,6 +68,24 @@ class GameConnector:
         """
         pass
 
+    def check_already_attacked(self):
+        """
+        checks if a space has already been attacked
+
+        :return:
+        :rtype:
+        """
+        pass
+
+    def check_score(self):
+        """
+        checks current game score
+
+        :return:
+        :rtype:
+        """
+        pass
+
     @staticmethod
     def _decode_json(input_json):
         """
