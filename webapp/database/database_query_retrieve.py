@@ -26,7 +26,7 @@ def get_entire_row(database_location, space):
     result = list(connection.execute(query))
     if result:
         result = result[0]
-    print(result)
+    # print(result)
     return result
 
 
