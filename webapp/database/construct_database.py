@@ -39,6 +39,9 @@ class OccupiedSpacesTable(Base):
     ShipID = Column('ShipID', Integer)
     Position = Column('Position', String)
     isHit = Column('isHit', Boolean)
+    __mapper_args__ = {
+        "primary_key": [PlayerID, ShipID, Position, isHit]
+    }
 
 
 def create_tables():
