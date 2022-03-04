@@ -35,9 +35,13 @@ class AttackMovesTable(Base):
 class OccupiedSpacesTable(Base):
     __tablename__ = "OccupiedSpaces"
 
-    ID = Column('ID', Integer, primary_key=True)
+    PlayerID = Column('PlayerID', Integer)  # NOTE: remove primary key
+    ShipID = Column('ShipID', Integer)
     Position = Column('Position', String)
     isHit = Column('isHit', Boolean)
+    __mapper_args__ = {
+        "primary_key": [PlayerID, ShipID, Position, isHit]
+    }
 
 
 def create_tables():
