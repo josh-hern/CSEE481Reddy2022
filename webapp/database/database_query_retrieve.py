@@ -11,7 +11,7 @@ def get_space(database_location, space):
     table_name = "OccupiedSpaces"
     query = f'SELECT Position FROM {table_name} WHERE (Position LIKE \"{space}\");'
     result = list(connection.execute(query))
-    print(result)
+    # print(result)
     if result:
         return True
     else:
@@ -38,8 +38,6 @@ def get_similar_ship_id(database_location, ship_id):
     result = list(connection.execute(query))
     # for entry in result:
     #     print(entry[0])
-    # print(result)
     return result
 
-
-print(get_similar_ship_id('///battleship_database.db', 2))
+# print(get_similar_ship_id('///battleship_database.db', 2))

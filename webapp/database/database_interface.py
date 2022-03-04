@@ -41,7 +41,7 @@ class GameConnector:
         attack_adder.ID = json_decoded['player']
         attack_adder.Position = json_decoded['attack_space']
         is_hit = self.check_space(json_decoded['attack_space'])
-        if self.check_ship_sunk():
+        if self.check_ship_sunk(json_decoded['attack_space']):
             # Add attack move to table
             print('you sunk {ship}!')
         elif is_hit:
@@ -76,18 +76,21 @@ class GameConnector:
         :return:
         :rtype:
         """
-        database_row = get_space(self.database_location_sqlalchemy, space)
-        ship_id = database_row[0]
+        database_row = get_entire_row(self.database_location_sqlalchemy, space)
+        # print(database_row, 'database_row')
+        ship_id = database_row[1]
         list_of_hits = get_similar_ship_id(self.database_location_sqlalchemy, ship_id)
+        # print(list_of_hits)
         for entry in list_of_hits:
-            if not entry[0]:
+            # print(entry[0], 'entry')
+            if entry[0] == 'True':
                 continue
             else:
-                return True
-        return False
+                return False
+        return True
 
     @staticmethod
-    def _decode_json(input_json):
+    def decode_json(input_json):
         """
         Decodes json to a python dictionary
 
@@ -95,7 +98,10 @@ class GameConnector:
         :rtype:
         """
         import json
-        if input_json.find('.json'):
+        print(input_json)
+        space = input_json.find('.json')
+        print(space)
+        if input_json.find('.json') > 0:
             with open(input_json, 'r') as json_file:
                 json_to_dict = json.load(json_file)
         else:
