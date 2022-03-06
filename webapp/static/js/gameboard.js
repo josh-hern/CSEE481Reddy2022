@@ -2,10 +2,6 @@ window.onload = () => {
   setupListeners();
 }
 
-window.onresize = () => {
-  changeButtonWidth();
-}
-
 const removeAllEventListeners = () => {
   allCells = document.querySelectorAll("td.table-cell");
   allCells.forEach((cell) => {
@@ -16,7 +12,10 @@ const removeAllEventListeners = () => {
 
 const toggleRotate = () => {
   rotate = !rotate;
-  console.log(rotate);
+}
+
+const removeRotate = () => {
+  document.getElementById('rotate-button').remove();
 }
 
 
@@ -55,6 +54,8 @@ const setupListeners = () => {
     cell.addEventListener('mouseout', () => {unHighlightSpaces(cell, shipLength)})
     cell.addEventListener('click', () => {placeShip(cell, shipName, shipLength)})
   })
+
+  document.getElementById('command').innerHTML = "Place your: " + shipName;
 }
 
 const highlightSpaces = (cell, shipLength) => {
@@ -79,19 +80,19 @@ const highlightSpaces = (cell, shipLength) => {
 
 const unHighlightSpaces = (cell, shipLength) => {
   if(!hasConflicts(cell, shipLength)) {
-    cell.style.backgroundColor = 'white';
+    cell.style.backgroundColor = 'transparent';
     if(rotate) {
       for (let i = 1; i < shipLength; i++) {
         let offset = parseInt(cell.dataset.y) + i
         let tmpCell = document.querySelector("[data-y='" + offset + "'][data-x='" + cell.dataset.x + "']");
-        tmpCell.style.backgroundColor = "white";
+        tmpCell.style.backgroundColor = "transparent";
       }
     }
     else {
       for (let i = 1; i < shipLength; i++) {
         let offset = parseInt(cell.dataset.x) + i
         let tmpCell = document.querySelector("[data-x='" + offset + "'][data-y='" + cell.dataset.y + "']");
-        tmpCell.style.backgroundColor = "white";
+        tmpCell.style.backgroundColor = "transparent";
       }
     }
   }
@@ -119,6 +120,9 @@ const placeShip = (cell, shipName, shipLength) => {
     if(currentShipIndex != 4){
       currentShipIndex++;
       setupListeners();
+    } else {
+      removeRotate();
+      document.getElementById('command').innerHTML = "Starting Game...";
     }
   }
 }
