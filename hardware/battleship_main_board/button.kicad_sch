@@ -159,7 +159,7 @@
   )
 
   (no_connect (at 139.7 71.12) (uuid 79954af7-c15c-4899-88a4-907a6226e067))
-  (no_connect (at 129.54 73.66) (uuid 79954af7-c15c-4899-88a4-907a6226e067))
+  (no_connect (at 129.54 73.66) (uuid 79954af7-c15c-4899-88a4-907a6226e068))
 
   (wire (pts (xy 115.57 58.42) (xy 129.54 58.42))
     (stroke (width 0) (type default) (color 0 0 0 0))
