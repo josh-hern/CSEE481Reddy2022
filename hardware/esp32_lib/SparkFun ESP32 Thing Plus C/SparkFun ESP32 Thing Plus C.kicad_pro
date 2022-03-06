@@ -424,11 +424,15 @@
     "subpart_first_id": 65,
     "subpart_id_separator": 0
   },
+<<<<<<< HEAD
   "sheets": [
     [
       "773e3d08-fe24-4bea-b3ab-0fc2b4185ac3",
       "SparkFun ESP32 Thing Plus C_0"
     ]
   ],
+=======
+  "sheets": [],
+>>>>>>> main
   "text_variables": {}
 }

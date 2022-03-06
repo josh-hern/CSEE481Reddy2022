@@ -1,4 +1,5 @@
 (kicad_sch (version 20211123) (generator eeschema)
+<<<<<<< HEAD
 
   (uuid e63e39d7-6ac0-4ffd-8aa3-1841a4541b55)
 
@@ -1827,4 +1828,9 @@
       (reference "U?") (unit 5) (value "74LS08") (footprint "")
     )
   )
+=======
+  (paper "A4")
+  (lib_symbols)
+  (symbol_instances)
+>>>>>>> main
 )
