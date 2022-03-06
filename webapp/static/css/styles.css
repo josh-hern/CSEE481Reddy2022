@@ -1,0 +1,24 @@
+
+.page-wrapper {
+  width: 100vw;
+  height: 100vh;
+}
+
+.table-cell {
+  text-align: center;
+  height: 2em;
+  width: 2em;
+  border: 1px solid black
+}
+
+.table-col-def {
+  text-align: center;
+  height: 2em;
+  width: 2em;
+}
+
+.table-row-def {
+  text-align: center
+  height: 2em;
+  width: 2em;
+}

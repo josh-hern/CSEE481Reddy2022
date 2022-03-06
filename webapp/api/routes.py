@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template
+from controllers.BaseController import *
 
 api = Blueprint('/api/', __name__)
 
@@ -8,4 +9,4 @@ def test():
 
 @api.route('/')
 def homeRoute():
-    return render_template('index.html', test=test())
+    return viewHome()
