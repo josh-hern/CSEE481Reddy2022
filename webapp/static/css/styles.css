@@ -42,3 +42,19 @@
 .shadow {
   box-shadow: 5px 5px 10px #000000
 }
+
+.merch-item:hover {
+  border-radius: 25px;
+  animation-name: fadeIn;
+  animation-duration: .25s;
+  box-shadow: 7px 5px 12px #000000
+}
+
+@keyframes fadeIn {
+  0% {
+    box-shadow: 0px 0px 0px #000000
+  }
+  100% {
+    box-shadow: 7px 5px 12px #000000
+  }
+}
