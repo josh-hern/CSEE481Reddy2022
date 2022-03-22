@@ -67,13 +67,28 @@ class GameConnector:
         is_space_occupied = get_space(self.database_location_sqlalchemy, space)
         return is_space_occupied
 
-    def add_ship_position(self):
+     def add_ship_position(self, json_input):
         """
         Adds ship positions from game startup
+        Needs to know which ship and the space location
 
         :return:
         :rtype:
         """
+        # {ship_space: <space_string>, ship_type: <ship_ID>, player: <int_ID>}
+        json_decoded = self._decode_json(json_input)
+        
+        session = self.sessionmaker_session()
+        ship_adder = database.ShipTable()
+        attack_adder.ID = json_decoded['player']
+        attack_adder.Ship = json_decoded['ship_type']
+        attack_adder.Position = json_decoded['ship_space']
+        
+        '''
+        Might need to check to see if space is already occupied, but not sure since you can't put a ship on top of itself
+        '''
+        
+        
         pass
 
     def check_ship_sunk(self, space):
