@@ -75,14 +75,19 @@ class GameConnector:
         :return:
         :rtype:
         """
-        # {ship_space: <space_string>, ship_type: <ship_ID>, player: <int_ID>}
+        # {ship_space: <space_string>, ship_direction: <ship_direction>, ship_type: <ship_ID>, player: <int_ID>}
         json_decoded = self._decode_json(json_input)
         
         session = self.sessionmaker_session()
         ship_adder = database.ShipTable()
-        attack_adder.ID = json_decoded['player']
-        attack_adder.Ship = json_decoded['ship_type']
-        attack_adder.Position = json_decoded['ship_space']
+        ship_adder.PlayerID = json_decoded['player']
+        ship_adder.Ship = json_decoded['ship_type']
+        ship_adder.Position = json_decoded['ship_space']
+        ship_adder.Direction = json_decoded['ship_direction']
+        
+        session.add(ship_adder)
+        session.commit()
+        session.close()
         
         '''
         Might need to check to see if space is already occupied, but not sure since you can't put a ship on top of itself
