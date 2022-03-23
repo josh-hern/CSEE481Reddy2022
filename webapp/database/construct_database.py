@@ -27,9 +27,12 @@ class ShipTable(Base):
 class AttackMovesTable(Base):
     __tablename__ = "AttackMoves"
 
-    PlayerID = Column('PlayerID', Integer, primary_key=True)
+    PlayerID = Column('PlayerID', Integer)
     Position = Column('Position', String)
     isHit = Column('isHit', Boolean)
+    __mapper_args__ = {
+        "primary_key": [PlayerID, Position, isHit]
+    }
 
 
 class OccupiedSpacesTable(Base):

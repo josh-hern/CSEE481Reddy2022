@@ -36,13 +36,17 @@ class GameConnector:
         3a3. else, just add the hit
         3b If space is not used, add a miss
         '''
-
+        session = self.sessionmaker_session()
         attack_adder = database.AttackMovesTable()
-        attack_adder.ID = json_decoded['player']
+        attack_adder.PlayerID = json_decoded['player']
         attack_adder.Position = json_decoded['attack_space']
         is_hit = self.check_space(json_decoded['attack_space'])
         if is_hit:
             self.add_hit(player=json_decoded['player'], position=json_decoded['attack_space'])
+            attack_adder.isHit = 1
+            session.add(attack_adder)
+            session.commit()
+            session.close()
             print("hit!")
             if self.check_ship_sunk(json_decoded['attack_space']):
                 ship_id = {1: 'carrier',
@@ -55,6 +59,10 @@ class GameConnector:
                 ship_num = database_row[1]
                 print(f'you sunk my {ship_id[ship_num]}!')
         else:
+            attack_adder.isHit = 0
+            session.add(attack_adder)
+            session.commit()
+            session.close()
             print("miss!")
 
     def check_space(self, space):
@@ -67,7 +75,7 @@ class GameConnector:
         is_space_occupied = get_space(self.database_location_sqlalchemy, space)
         return is_space_occupied
 
-     def add_ship_position(self, json_input):
+    def add_ship_position(self, json_input):
         """
         Adds ship positions from game startup
         Needs to know which ship and the space location
@@ -77,24 +85,48 @@ class GameConnector:
         """
         # {ship_space: <space_string>, ship_direction: <ship_direction>, ship_type: <ship_ID>, player: <int_ID>}
         json_decoded = self._decode_json(json_input)
-        
+        ship_id_to_length = {'1': 2,
+                             '2': 3,
+                             '3': 3,
+                             '4': 4,
+                             '5': 5}
+        ship_length = ship_id_to_length[str(json_decoded['ship_type'])]
         session = self.sessionmaker_session()
-        ship_adder = database.ShipTable()
+        ship_adder = database.OccupiedSpacesTable()
         ship_adder.PlayerID = json_decoded['player']
-        ship_adder.Ship = json_decoded['ship_type']
-        ship_adder.Position = json_decoded['ship_space']
-        ship_adder.Direction = json_decoded['ship_direction']
-        
+        ship_adder.ShipID = json_decoded['ship_type']
+        initial_space = json_decoded['ship_space']
+        ship_adder.Position = initial_space
+        ship_adder.isHit = 0
         session.add(ship_adder)
         session.commit()
         session.close()
-        
-        '''
-        Might need to check to see if space is already occupied, but not sure since you can't put a ship on top of itself
-        '''
-        
-        
-        pass
+        if json_decoded['ship_direction'] == 'v':
+            initial_row = str(initial_space[0])
+            for i in range(1, ship_length):
+                session = self.sessionmaker_session()
+                ship_adder = database.OccupiedSpacesTable()
+                ship_adder.PlayerID = json_decoded['player']
+                ship_adder.ShipID = json_decoded['ship_type']
+                position_string = f'{chr(ord(initial_row) + i)}{initial_space[1]}'
+                ship_adder.Position = position_string
+                ship_adder.isHit = 0
+                session.add(ship_adder)
+                session.commit()
+                session.close()
+        else:
+            initial_number = int(initial_space[1])
+            for i in range(1, ship_length):
+                session = self.sessionmaker_session()
+                ship_adder = database.OccupiedSpacesTable()
+                ship_adder.PlayerID = json_decoded['player']
+                ship_adder.ShipID = json_decoded['ship_type']
+                position_string = f'{initial_space[0]}{initial_number + i}'
+                ship_adder.Position = position_string
+                ship_adder.isHit = 0
+                session.add(ship_adder)
+                session.commit()
+                session.close()
 
     def check_ship_sunk(self, space):
         """
@@ -121,6 +153,7 @@ class GameConnector:
         database_row = get_entire_row(self.database_location_sqlalchemy, position)
         # print(database_row, 'database_row')
         ship_id = database_row[1]
+        print(ship_id, player, position)
         connection = engine.connect()
         query = f'UPDATE OccupiedSpaces SET isHit = True WHERE (ShipID = {ship_id} AND PlayerID = {player} AND Position LIKE \"{position}\");'
         connection.execute(query)
@@ -147,4 +180,9 @@ class GameConnector:
 
 test = GameConnector()
 # print(test.check_ship_sunk('a4'))
+test.add_ship_position('{"ship_space": "a6", "ship_direction": "v", "ship_type": 3, "player": 1}')
+test.add_ship_position('{"ship_space": "b4", "ship_direction": "h", "ship_type": 5, "player": 2}')
+test.add_ship_position('{"ship_space": "c2", "ship_direction": "v", "ship_type": 4, "player": 2}')
+test.add_attack_to_database('{"attack_space": "a5", "player": 1}')
 test.add_attack_to_database('{"attack_space": "a6", "player": 1}')
+test.add_attack_to_database('{"attack_space": "a7", "player": 1}')
