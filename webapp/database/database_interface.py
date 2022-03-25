@@ -3,8 +3,8 @@ This file will be for operations involving the database
 """
 from sqlalchemy.orm import sessionmaker
 
-import construct_database as database
-from database_query_retrieve import *
+import webapp.database.construct_database as database
+from webapp.database.database_query_retrieve import *
 
 
 class GameConnector:
@@ -85,11 +85,12 @@ class GameConnector:
         """
         # {ship_space: <space_string>, ship_direction: <ship_direction>, ship_type: <ship_ID>, player: <int_ID>}
         json_decoded = self._decode_json(json_input)
-        ship_id_to_length = {'1': 2,
-                             '2': 3,
-                             '3': 3,
-                             '4': 4,
-                             '5': 5}
+        ship_id_to_length = {'patrol boat': 2,
+                             'submarine': 3,
+                             'destroyer': 3,
+                             'battleship': 4,
+                             'carrier': 5
+                             }
         ship_length = ship_id_to_length[str(json_decoded['ship_type'])]
         session = self.sessionmaker_session()
         ship_adder = database.OccupiedSpacesTable()
@@ -177,12 +178,11 @@ class GameConnector:
             json_to_dict = json.loads(input_json)
         return json_to_dict
 
-
-test = GameConnector()
+# test = GameConnector()
 # print(test.check_ship_sunk('a4'))
-test.add_ship_position('{"ship_space": "a6", "ship_direction": "v", "ship_type": 3, "player": 1}')
-test.add_ship_position('{"ship_space": "b4", "ship_direction": "h", "ship_type": 5, "player": 2}')
-test.add_ship_position('{"ship_space": "c2", "ship_direction": "v", "ship_type": 4, "player": 2}')
-test.add_attack_to_database('{"attack_space": "a5", "player": 1}')
-test.add_attack_to_database('{"attack_space": "a6", "player": 1}')
-test.add_attack_to_database('{"attack_space": "a7", "player": 1}')
+# test.add_ship_position('{"ship_space": "a6", "ship_direction": "v", "ship_type": 3, "player": 1}')
+# test.add_ship_position('{"ship_space": "b4", "ship_direction": "h", "ship_type": 5, "player": 2}')
+# test.add_ship_position('{"ship_space": "c2", "ship_direction": "v", "ship_type": 4, "player": 2}')
+# test.add_attack_to_database('{"attack_space": "a5", "player": 1}')
+# test.add_attack_to_database('{"attack_space": "a6", "player": 1}')
+# test.add_attack_to_database('{"attack_space": "a7", "player": 1}')

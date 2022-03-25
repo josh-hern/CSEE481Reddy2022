@@ -128,12 +128,34 @@ const placeShip = (cell, shipName, shipLength) => {
 }
 
 const pushShipToObject = (cell, shipName, shipLength) => {
+  var dataset_y_to_letter = {
+    1: 'A',
+    2: 'B',
+    3: 'C',
+    4: 'D',
+    5: 'E',
+    6: 'F',
+    7: 'G',
+    8: 'H',
+    9: 'I',
+    10: 'J'
+  }
   if(rotate) {
     for (let i = 0; i < shipLength; i++) {
       let newObject = {
         [shipName]: [parseInt(cell.dataset.x), parseInt(cell.dataset.y)+i]
       }
       boardData['aliveCells'].push(newObject);
+      const s = JSON.stringify({
+        'ship_space': dataset_y_to_letter[cell.dataset.y] + cell.dataset.x,
+        'ship_direction': 'h',
+        'ship_type': shipName,
+        'player': 2})
+      $.ajax({
+            url:"/add_ship_position",
+            type:"POST",
+            contentType: "application/json",
+            data: JSON.stringify(s)});
     }
   }
   else {
@@ -142,6 +164,16 @@ const pushShipToObject = (cell, shipName, shipLength) => {
         [shipName]: [parseInt(cell.dataset.x)+i, parseInt(cell.dataset.y)]
       }
       boardData['aliveCells'].push(newObject);
+      const s = JSON.stringify({
+        'ship_space': dataset_y_to_letter[cell.dataset.y] + cell.dataset.x,
+        'ship_direction': 'h',
+        'ship_type': shipName,
+        'player': 2})
+      $.ajax({
+            url:"/add_ship_position",
+            type:"POST",
+            contentType: "application/json",
+            data: JSON.stringify(s)});
     }
   }
 }
