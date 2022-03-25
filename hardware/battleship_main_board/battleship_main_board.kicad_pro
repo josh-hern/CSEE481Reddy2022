@@ -2,26 +2,120 @@
   "board": {
     "design_settings": {
       "defaults": {
-        "board_outline_line_width": 0.1,
-        "copper_line_width": 0.2,
+        "board_outline_line_width": 0.09999999999999999,
+        "copper_line_width": 0.19999999999999998,
+        "copper_text_italic": false,
         "copper_text_size_h": 1.5,
         "copper_text_size_v": 1.5,
         "copper_text_thickness": 0.3,
+        "copper_text_upright": false,
+        "courtyard_line_width": 0.049999999999999996,
+        "dimension_precision": 4,
+        "dimension_units": 3,
+        "dimensions": {
+          "arrow_length": 1270000,
+          "extension_offset": 500000,
+          "keep_text_aligned": true,
+          "suppress_zeroes": false,
+          "text_position": 0,
+          "units_format": 1
+        },
+        "fab_line_width": 0.09999999999999999,
+        "fab_text_italic": false,
+        "fab_text_size_h": 1.0,
+        "fab_text_size_v": 1.0,
+        "fab_text_thickness": 0.15,
+        "fab_text_upright": false,
         "other_line_width": 0.15,
+        "other_text_italic": false,
+        "other_text_size_h": 1.0,
+        "other_text_size_v": 1.0,
+        "other_text_thickness": 0.15,
+        "other_text_upright": false,
+        "pads": {
+          "drill": 0.762,
+          "height": 1.524,
+          "width": 1.524
+        },
         "silk_line_width": 0.15,
+        "silk_text_italic": false,
         "silk_text_size_h": 1.0,
         "silk_text_size_v": 1.0,
-        "silk_text_thickness": 0.15
+        "silk_text_thickness": 0.15,
+        "silk_text_upright": false,
+        "zones": {
+          "45_degree_only": false,
+          "min_clearance": 0.508
+        }
       },
       "diff_pair_dimensions": [],
       "drc_exclusions": [],
+      "meta": {
+        "version": 2
+      },
+      "rule_severities": {
+        "annular_width": "error",
+        "clearance": "error",
+        "copper_edge_clearance": "error",
+        "courtyards_overlap": "error",
+        "diff_pair_gap_out_of_range": "error",
+        "diff_pair_uncoupled_length_too_long": "error",
+        "drill_out_of_range": "error",
+        "duplicate_footprints": "warning",
+        "extra_footprint": "warning",
+        "footprint_type_mismatch": "error",
+        "hole_clearance": "error",
+        "hole_near_hole": "error",
+        "invalid_outline": "error",
+        "item_on_disabled_layer": "error",
+        "items_not_allowed": "error",
+        "length_out_of_range": "error",
+        "malformed_courtyard": "error",
+        "microvia_drill_out_of_range": "error",
+        "missing_courtyard": "ignore",
+        "missing_footprint": "warning",
+        "net_conflict": "warning",
+        "npth_inside_courtyard": "ignore",
+        "padstack": "error",
+        "pth_inside_courtyard": "ignore",
+        "shorting_items": "error",
+        "silk_over_copper": "warning",
+        "silk_overlap": "warning",
+        "skew_out_of_range": "error",
+        "through_hole_pad_without_hole": "error",
+        "too_many_vias": "error",
+        "track_dangling": "warning",
+        "track_width": "error",
+        "tracks_crossing": "error",
+        "unconnected_items": "error",
+        "unresolved_variable": "error",
+        "via_dangling": "warning",
+        "zone_has_empty_net": "error",
+        "zones_intersect": "error"
+      },
       "rules": {
+        "allow_blind_buried_vias": false,
+        "allow_microvias": false,
+        "max_error": 0.005,
+        "min_clearance": 0.0,
         "min_copper_edge_clearance": 0.0,
+        "min_hole_clearance": 0.25,
+        "min_hole_to_hole": 0.25,
+        "min_microvia_diameter": 0.19999999999999998,
+        "min_microvia_drill": 0.09999999999999999,
+        "min_silk_clearance": 0.0,
+        "min_through_hole_diameter": 0.3,
+        "min_track_width": 0.19999999999999998,
+        "min_via_annular_width": 0.049999999999999996,
+        "min_via_diameter": 0.39999999999999997,
         "solder_mask_clearance": 0.0,
-        "solder_mask_min_width": 0.0
+        "solder_mask_min_width": 0.0,
+        "use_height_for_length_calcs": true
       },
       "track_widths": [],
-      "via_dimensions": []
+      "via_dimensions": [],
+      "zones_allow_external_fillets": false,
+      "zones_use_no_outline": true
     },
     "layer_presets": []
   },
@@ -316,15 +410,110 @@
     "subpart_first_id": 65,
     "subpart_id_separator": 0
   },
-<<<<<<< HEAD
   "sheets": [
     [
       "e63e39d7-6ac0-4ffd-8aa3-1841a4541b55",
       ""
     ],
     [
-      "6865eff2-8d4c-490d-9f7b-b0e953360c9e",
-      "InputMatrix"
+      "1c30089f-fe88-4bbd-9460-896cdc171d41",
+      "OutputMatrix"
+    ],
+    [
+      "72eb16b6-1e0b-404a-8812-56dc81f722e5",
+      "TenLEDRow"
+    ],
+    [
+      "91dde27e-7b25-4d5e-aa5e-b86bf39013d1",
+      "TenLEDRow1"
+    ],
+    [
+      "c4fd5647-9381-4255-89c8-d500d3d16bd2",
+      "TenLEDRow2"
+    ],
+    [
+      "6b6f0777-1e88-4e00-9010-5e016bc294cb",
+      "TenLEDRow3"
+    ],
+    [
+      "5a5a64ab-801d-4962-8169-3e6cb3a65ec2",
+      "TenLEDRow4"
+    ],
+    [
+      "e009e877-8055-4dc9-a35d-7c34434b6e65",
+      "TenLEDRow5"
+    ],
+    [
+      "09df8242-6c7d-4fbd-b831-cc89f64a0793",
+      "TenLEDRow6"
+    ],
+    [
+      "c9cfcf67-9d14-474c-86e2-cf49a5b9c3fe",
+      "TenLEDRow7"
+    ],
+    [
+      "eab979c8-8926-4609-9824-342b30b7b5f8",
+      "TenLEDRow8"
+    ],
+    [
+      "30d6a6f9-9200-46c1-872c-c772c4855218",
+      "TenLEDRow9"
+    ],
+    [
+      "b11b5234-55e6-4935-be4e-efdedb6d467c",
+      "OutputMatrix1"
+    ],
+    [
+      "72eb16b6-1e0b-404a-8812-56dc81f722e5",
+      "TenLEDRow"
+    ],
+    [
+      "91dde27e-7b25-4d5e-aa5e-b86bf39013d1",
+      "TenLEDRow1"
+    ],
+    [
+      "c4fd5647-9381-4255-89c8-d500d3d16bd2",
+      "TenLEDRow2"
+    ],
+    [
+      "6b6f0777-1e88-4e00-9010-5e016bc294cb",
+      "TenLEDRow3"
+    ],
+    [
+      "5a5a64ab-801d-4962-8169-3e6cb3a65ec2",
+      "TenLEDRow4"
+    ],
+    [
+      "e009e877-8055-4dc9-a35d-7c34434b6e65",
+      "TenLEDRow5"
+    ],
+    [
+      "09df8242-6c7d-4fbd-b831-cc89f64a0793",
+      "TenLEDRow6"
+    ],
+    [
+      "c9cfcf67-9d14-474c-86e2-cf49a5b9c3fe",
+      "TenLEDRow7"
+    ],
+    [
+      "eab979c8-8926-4609-9824-342b30b7b5f8",
+      "TenLEDRow8"
+    ],
+    [
+      "30d6a6f9-9200-46c1-872c-c772c4855218",
+      "TenLEDRow9"
+    ],
+    [
+      "e86d2369-f26e-4a35-ba96-d9ed71fc0001",
+      "UserInputs"
+    ],
+    [
+      "636d72f3-00ad-4d53-9fbb-a696b42228b9",
+      "ESP32"
+    ],
+    [
+      "f54f800d-45c9-4b6a-aca7-e2f9d674f9f3",
+      "InputMatrix1"
     ],
     [
       "6f2cc480-71b3-4706-a63e-a53ea1bbf316",
@@ -727,8 +916,5 @@
       "Button99"
     ]
   ],
-=======
-  "sheets": [],
->>>>>>> main
   "text_variables": {}
 }
