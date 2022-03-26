@@ -24,9 +24,9 @@ let rotate = false;
 
 let boardData = {
   'shipLengths': {
-    'Battleship': 3,
+    'Battleship': 4,
     'Carrier': 5,
-    'Destroyer': 4,
+    'Destroyer': 3,
     'Patrol Boat': 2,
     'Submarine': 3
   },
@@ -147,8 +147,7 @@ const pushShipToObject = (cell, shipName, shipLength) => {
       }
       boardData['aliveCells'].push(newObject);
       const s = JSON.stringify({
-        'ship_space': dataset_y_to_letter[cell.dataset.y] + cell.dataset.x,
-        'ship_direction': 'h',
+        'ship_space': dataset_y_to_letter[(parseInt(cell.dataset.y)+i)] + parseInt(cell.dataset.x),
         'ship_type': shipName,
         'player': 2})
       $.ajax({
@@ -165,8 +164,7 @@ const pushShipToObject = (cell, shipName, shipLength) => {
       }
       boardData['aliveCells'].push(newObject);
       const s = JSON.stringify({
-        'ship_space': dataset_y_to_letter[cell.dataset.y] + cell.dataset.x,
-        'ship_direction': 'h',
+        'ship_space': dataset_y_to_letter[parseInt(cell.dataset.y)] + (parseInt(cell.dataset.x)+i),
         'ship_type': shipName,
         'player': 2})
       $.ajax({

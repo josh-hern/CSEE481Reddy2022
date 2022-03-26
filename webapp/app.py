@@ -1,12 +1,13 @@
 from flask import Flask
 
+import webapp.initialize_game as game
 from api.routes import api
-from webapp.database import database_interface
 
 app = Flask(__name__, template_folder='./views')
 app.development = True
 app.register_blueprint(api)
 
 if __name__ == "__main__":
-    battleship_game = database_interface.GameConnector()
+    game.initialize_game()
+    # print('got here')
     app.run(debug=True)

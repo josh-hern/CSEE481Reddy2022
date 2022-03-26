@@ -39,7 +39,7 @@ class OccupiedSpacesTable(Base):
     __tablename__ = "OccupiedSpaces"
 
     PlayerID = Column('PlayerID', Integer)
-    ShipID = Column('ShipID', Integer)
+    ShipID = Column('ShipID', String)
     Position = Column('Position', String)
     isHit = Column('isHit', Boolean)
     __mapper_args__ = {

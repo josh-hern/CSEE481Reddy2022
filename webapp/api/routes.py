@@ -1,6 +1,6 @@
 from flask import request
 
-# from webapp.app import battleship_game
+from webapp import initialize_game
 from webapp.controllers.BaseController import *
 
 # from controllers.BaseController import *
@@ -36,5 +36,5 @@ def merchRoute():
 def add_ship_position():
     position_json = request.get_json()
     print(position_json)
-    # battleship_game.add_ship_position(position_json)
+    initialize_game.battleship_game.add_ship_position(position_json)
     return position_json
