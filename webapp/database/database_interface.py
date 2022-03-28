@@ -1,10 +1,9 @@
 """
 This file will be for operations involving the database
 """
+import database.construct_database as database
+from database.database_query_retrieve import *
 from sqlalchemy.orm import sessionmaker
-
-import webapp.database.construct_database as database
-from webapp.database.database_query_retrieve import *
 
 
 class GameConnector:

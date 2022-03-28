@@ -1,7 +1,6 @@
+import initialize_game
+from controllers.BaseController import *
 from flask import request
-
-from webapp import initialize_game
-from webapp.controllers.BaseController import *
 
 # from controllers.BaseController import *
 

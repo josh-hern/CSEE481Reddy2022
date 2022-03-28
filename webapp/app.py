@@ -1,6 +1,6 @@
 from flask import Flask
 
-import webapp.initialize_game as game
+import initialize_game as game
 from api.routes import api
 
 app = Flask(__name__, template_folder='./views')

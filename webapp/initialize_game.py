@@ -1,6 +1,6 @@
 import os
 
-from webapp.database import database_interface
+from database import database_interface
 
 battleship_game = None
 
