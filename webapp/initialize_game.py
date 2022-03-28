@@ -7,5 +7,7 @@ battleship_game = None
 
 def initialize_game():
     global battleship_game
-    absolute_path = os.path.abspath(__file__)
-    battleship_game = database_interface.GameConnector(f'///database/battleship_database.db')
+    initial_dir = os.path.join(os.path.dirname(__file__), 'database', 'battleship_database.db')
+    battleship_game = database_interface.GameConnector('///' + initial_dir.replace('\\', '/'))
+
+    # battleship_game = database_interface.GameConnector(f'///database/battleship_database.db')
