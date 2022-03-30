@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name "Battleship")(type "KiCad")(uri "${KIPRJMOD}/battleship_symbols.kicad_sym")(options "")(descr ""))
+)

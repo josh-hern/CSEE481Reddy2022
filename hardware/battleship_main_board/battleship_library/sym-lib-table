@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name "battleship_symbols")(type "KiCad")(uri "/home/alyx/CSEE481Reddy2022/hardware/battleship_main_board/battleship_symbols.kicad_sym")(options "")(descr ""))
+)
