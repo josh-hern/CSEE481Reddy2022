@@ -31,9 +31,8 @@ def merchRoute():
     return viewMerch()
 
 
-@api.route('/add_ship_position', methods=['POST'])
+@api.route('/api/add_ship_position', methods=['POST'])
 def add_ship_position():
     position_json = request.get_json()
-    print(position_json)
     initialize_game.battleship_game.add_ship_position(position_json)
     return position_json

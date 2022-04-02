@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 SQLAlchemy = "~=1.4.31"
 flask = "*"
+pytest = "*"
 
 [dev-packages]
 
