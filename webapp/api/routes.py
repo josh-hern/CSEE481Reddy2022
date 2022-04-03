@@ -35,5 +35,16 @@ def merchRoute():
 def add_ship_position():
     position_json = request.get_json()
     print(position_json)
-    initialize_game.battleship_game.add_ship_position(position_json)
+    player_id = initialize_game.battleship_game.add_ship_position(position_json)
+    # allow_json = check_allowed(player_id)  # TODO remember to uncomment this when functions are written
+    # return allow_json
     return position_json
+
+
+@api.route('/check_allowed')
+def check_allowed(player_id):
+    if initialize_game.battleship_game.check_space_exists() and initialize_game.battleship_game.check_not_adjacent():
+        return f'<div>{player_id}, True</div>'
+    else:
+        return f'<div>{player_id}, False</div>'
+    pass

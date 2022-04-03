@@ -102,6 +102,7 @@ class GameConnector:
         session.add(ship_adder)
         session.commit()
         session.close()
+        return json_decoded['player']
         # if json_decoded['ship_direction'] == 'v':
         #     initial_row = str(initial_space[0])
         #     for i in range(1, ship_length):
