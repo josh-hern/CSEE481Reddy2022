@@ -1,3 +1,4 @@
+import pcbnew
 
 class SwitchDiodePair:
 
@@ -20,7 +21,7 @@ class SwitchDiodePair:
 
 
 def position_leds(footprints, coords):
-    for foot_coord in zip(footprints, LED_coords):
+    for foot_coord in zip(footprints, coords):
         footprint, coord = foot_coord
         x, y = coord
         footprint.SetPosition(pcbnew.wxPointMM(x, y))
@@ -82,7 +83,7 @@ def position_footprints(footprints, coords):
     for foot_coord in zip(footprints, coords):
         footprint, coord = foot_coord
         x, y = coord
-        footprint.SetPosition(pcbnew.wxPointMM(x, y))
+        footprint.position_footprints(x, y)
     pcbnew.Refresh()
 
 def position_switches(spacing):
