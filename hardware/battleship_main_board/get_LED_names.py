@@ -105,5 +105,18 @@ def position_diode_pairs(spacing=20, rel_x=0, rel_y=0):
         pair.position_footprints(x, y)
     pcbnew.Refresh()
     
-    
+def link_leds():
+    board = pcbnew.GetBoard()
+    layertable = {}
+    numlayers = pcbnew.LAYER_ID_COUNT
+    for i in range(numlayers):
+        layertable[i] = board.GetLayerName(i)
+        print(f"{i} {board.GetLayerName(i)}")
+
+    board_track = pcbnew.TRACK(board)
+    board_track.setStart(pcbnew.wxPointMM())
+    board_track.setEnd(pcbnew.wxPointMM())
+    board_track.setLayer(layertable)
+    board_track.SetLayer(layertable["F.Cu"])
+    board.Add(board_track)
 
