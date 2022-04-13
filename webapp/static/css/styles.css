@@ -7,6 +7,10 @@
   background-repeat: repeat;
 }
 
+.hide {
+  display: none;
+}
+
 .table-cell {
   text-align: center;
   height: 2em;

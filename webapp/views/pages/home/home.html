@@ -4,14 +4,58 @@
 <div class="container">
   <div class="row mt-5">
     <div class="col">
-      <h3>Welcome to Elderscrolls: ConneXtions</h3>
+      <h3 id="header-text">Welcome to Elderscrolls: ConneXtions</h3>
+      <input type="hidden" id="game-code" value="">
+    </div>
+  </div>
+  <div class="row py-3" id="name-area">
+    <div class="col-3">
+      <h5>Enter your gamer_tag:</h5>
+      <input type="text" class="form-control" id="player-name" placeholder="Bingus">
+    </div>
+  </div>
+  <div id="start-game-prompt">
+    <div class="row">
+      <div class="col mt-5">
+        Starting a Game?
+        <hr>
+        <div class="btn btn-success" id="start-web">Start game with Another Web Client</div>
+        <div class="btn btn-success disabled" id="start-board" >Start game with Elderscrolls: ConneXtions War Board</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col mt-5">
+        Joining a Game?
+        <hr>
+        <div class="row">
+          <div class="col-4">
+            <input type="text" class="form-control" id="game-code-input" placeholder="Game Code">
+          </div>
+          <div class="col-2">
+            <div class="btn btn-warning" id="join-game">Join Game</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="row">
-    <div class="col">
-      {% include "components/gameboard.html" %}
+    <div class="m-3 col">
+      <p id="command"></p>
     </div>
   </div>
+  <div class="row">
+    <!-- <div class="col"> -->
+      <div id="my-board" class="col hide">
+        {% include 'components/gameboard.html' %}
+      </div>
+    <!-- </div> -->
+    <!-- <div class=""> -->
+      <div id="enemy-board" class="col hide">
+        {% include 'components/gameboard.html' %}
+      </div>
+    <!-- </div> -->
+  </div>
 </div>
-
+<script type="text/javascript" src="/static/js/home.js"></script>
+<script type="text/javascript" src="/static/js/gameboard.js"></script>
 {% endblock %}

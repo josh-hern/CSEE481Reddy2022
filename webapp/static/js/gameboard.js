@@ -1,9 +1,36 @@
+var dataset_y_to_letter = {
+  1: 'A',
+  2: 'B',
+  3: 'C',
+  4: 'D',
+  5: 'E',
+  6: 'F',
+  7: 'G',
+  8: 'H',
+  9: 'I',
+  10: 'J'
+}
+
+var dataset_y_to_number = {
+  'A': 1,
+  'B': 2,
+  'C': 3,
+  'D': 4,
+  'E': 5,
+  'F': 6,
+  'G': 7,
+  'H': 8,
+  'I': 9,
+  'J': 10
+}
+
 window.onload = () => {
   setupListeners();
+  document.querySelector('#rotate-button').classList.remove('hide');
 }
 
 const removeAllEventListeners = () => {
-  allCells = document.querySelectorAll("td.table-cell");
+  allCells = document.querySelectorAll("#my-board td.table-cell");
   allCells.forEach((cell) => {
     let cellClone = cell.cloneNode(true);
     cell.parentNode.replaceChild(cellClone, cell);
@@ -15,7 +42,7 @@ const toggleRotate = () => {
 }
 
 const removeRotate = () => {
-  document.getElementById('rotate-button').remove();
+  document.querySelector('#my-board #rotate-button').remove();
 }
 
 
@@ -48,14 +75,14 @@ const setupListeners = () => {
   let shipName = shipKeys[currentShipIndex];
   let shipLength = boardData['shipLengths'][shipName];
 
-  allCells = document.querySelectorAll("td.table-cell");
+  allCells = document.querySelectorAll("#my-board td.table-cell");
   allCells.forEach((cell) => {
     cell.addEventListener('mouseover', () => {highlightSpaces(cell, shipLength)})
     cell.addEventListener('mouseout', () => {unHighlightSpaces(cell, shipLength)})
     cell.addEventListener('click', () => {placeShip(cell, shipName, shipLength)})
   })
 
-  document.getElementById('command').innerHTML = "Place your: " + shipName;
+  document.querySelector('#command').innerHTML = "Place your: " + shipName;
 }
 
 const highlightSpaces = (cell, shipLength) => {
@@ -64,14 +91,14 @@ const highlightSpaces = (cell, shipLength) => {
     if(rotate) {
       for (let i = 1; i < shipLength; i++) {
         let offset = parseInt(cell.dataset.y) + i
-        let tmpCell = document.querySelector("[data-y='" + offset + "'][data-x='" + cell.dataset.x + "']");
+        let tmpCell = document.querySelector("#my-board [data-y='" + offset + "'][data-x='" + cell.dataset.x + "']");
         tmpCell.style.backgroundColor = "#dedede";
       }
     }
     else {
       for (let i = 1; i < shipLength; i++) {
         let offset = parseInt(cell.dataset.x) + i
-        let tmpCell = document.querySelector("[data-x='" + offset + "'][data-y='" + cell.dataset.y + "']");
+        let tmpCell = document.querySelector("#my-board [data-x='" + offset + "'][data-y='" + cell.dataset.y + "']");
         tmpCell.style.backgroundColor = "#dedede";
       }
     }
@@ -84,14 +111,14 @@ const unHighlightSpaces = (cell, shipLength) => {
     if(rotate) {
       for (let i = 1; i < shipLength; i++) {
         let offset = parseInt(cell.dataset.y) + i
-        let tmpCell = document.querySelector("[data-y='" + offset + "'][data-x='" + cell.dataset.x + "']");
+        let tmpCell = document.querySelector("#my-board [data-y='" + offset + "'][data-x='" + cell.dataset.x + "']");
         tmpCell.style.backgroundColor = "transparent";
       }
     }
     else {
       for (let i = 1; i < shipLength; i++) {
         let offset = parseInt(cell.dataset.x) + i
-        let tmpCell = document.querySelector("[data-x='" + offset + "'][data-y='" + cell.dataset.y + "']");
+        let tmpCell = document.querySelector("#my-board [data-x='" + offset + "'][data-y='" + cell.dataset.y + "']");
         tmpCell.style.backgroundColor = "transparent";
       }
     }
@@ -104,57 +131,29 @@ const placeShip = (cell, shipName, shipLength) => {
     if(rotate) {
       for (let i = 1; i < shipLength; i++) {
         let offset = parseInt(cell.dataset.y) + i
-        let tmpCell = document.querySelector("[data-y='" + offset + "'][data-x='" + cell.dataset.x + "']");
+        let tmpCell = document.querySelector("#my-board [data-y='" + offset + "'][data-x='" + cell.dataset.x + "']");
         tmpCell.style.backgroundColor = "cyan";
       }
     }
     else {
       for (let i = 1; i < shipLength; i++) {
         let offset = parseInt(cell.dataset.x) + i
-        let tmpCell = document.querySelector("[data-x='" + offset + "'][data-y='" + cell.dataset.y + "']");
+        let tmpCell = document.querySelector("#my-board [data-x='" + offset + "'][data-y='" + cell.dataset.y + "']");
         tmpCell.style.backgroundColor = "cyan";
       }
     }
     removeAllEventListeners();
     pushShipToObject(cell, shipName, shipLength);
-    if(currentShipIndex != 4){
-      currentShipIndex++;
-      setupListeners();
-    } else {
-      removeRotate();
-      document.getElementById('command').innerHTML = "Starting Game...";
-    }
   }
 }
 
 const pushShipToObject = (cell, shipName, shipLength) => {
-  var dataset_y_to_letter = {
-    1: 'A',
-    2: 'B',
-    3: 'C',
-    4: 'D',
-    5: 'E',
-    6: 'F',
-    7: 'G',
-    8: 'H',
-    9: 'I',
-    10: 'J'
-  }
   if(rotate) {
     for (let i = 0; i < shipLength; i++) {
       let newObject = {
         [shipName]: [parseInt(cell.dataset.x), parseInt(cell.dataset.y)+i]
       }
       boardData['aliveCells'].push(newObject);
-      const s = JSON.stringify({
-        'ship_space': dataset_y_to_letter[(parseInt(cell.dataset.y)+i)] + parseInt(cell.dataset.x),
-        'ship_type': shipName,
-        'player': 2})
-      $.ajax({
-            url:"/add_ship_position",
-            type:"POST",
-            contentType: "application/json",
-            data: JSON.stringify(s)});
     }
   }
   else {
@@ -163,17 +162,19 @@ const pushShipToObject = (cell, shipName, shipLength) => {
         [shipName]: [parseInt(cell.dataset.x)+i, parseInt(cell.dataset.y)]
       }
       boardData['aliveCells'].push(newObject);
-      const s = JSON.stringify({
-        'ship_space': dataset_y_to_letter[parseInt(cell.dataset.y)] + (parseInt(cell.dataset.x)+i),
-        'ship_type': shipName,
-        'player': 2})
-      $.ajax({
-            url:"/add_ship_position",
-            type:"POST",
-            contentType: "application/json",
-            data: JSON.stringify(s)});
     }
   }
+  const s = JSON.stringify({
+    'position': dataset_y_to_letter[parseInt(cell.dataset.y)] + parseInt(cell.dataset.x),
+    'ship_type': shipName,
+    'rotate': rotate,
+    'player': document.querySelector('#player-name').value,
+    'code': document.querySelector('#game-code').value});
+
+  postData('/api/place_ship', s).then(data => {
+    buildBoard("my-board", data);
+    confirmSetup();
+  })
 }
 
 // returns bool if ship is in way
@@ -201,4 +202,37 @@ const hasConflicts = (cell, shipLength) => {
     }
   }
   return false;
+}
+
+const buildBoard = (board, spaces) => {
+  wipeBoard(board);
+  spaces.forEach((space, i) => {
+    let y = dataset_y_to_number[space['Position'][0]]
+    let x = space['Position'].substring(1);
+    let tmpCell = document.querySelector("#" + board + " [data-y='" + y + "'][data-x='" + x + "']");
+    tmpCell.style.backgroundColor = "green";
+  });
+
+}
+
+const wipeBoard = (board) => {
+  for (let i = 1; i < 11; i++) {
+    for (let j = 1; j < 11; j++) {
+      let tmpCell = document.querySelector("#" + board + " [data-y='" + i + "'][data-x='" + j + "']");
+      tmpCell.style.backgroundColor = "transparent";
+    }
+  }
+}
+
+const confirmSetup = (game, player) => {
+  postData('/api/confirm_setup', {"name": document.querySelector('#player-name').value, "code": document.querySelector('#game-code').value}).then(data => {
+    if(!data){
+      currentShipIndex++;
+      setupListeners();
+    } else {
+      removeRotate();
+      document.querySelector("#enemy-board").classList.remove("hide");
+      document.querySelector('#command').innerHTML = "Starting Game...";
+    }
+  })
 }
