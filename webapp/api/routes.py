@@ -59,8 +59,17 @@ def confirm_setup_route():
 def join_from_war_board_route():
     pass
 
+
 @api.route('/api/join_from_web', methods=['POST'])
 def join_from_web_route():
     request_json = request.get_json()
     response = join_from_web(request_json['code'], request_json['name'])
     return json.dumps(response)
+
+
+@api.route('/api/check_game_status', methods=['GET'])
+def check_game_status_route():
+    request_json = request.get_json()
+    response = check_game_status(request_json['game'], request_json['name']);
+    return json.dumps(response)
+
