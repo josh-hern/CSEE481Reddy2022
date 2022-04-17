@@ -111,3 +111,22 @@ def check_game_status(game_code, player):
     status['enemy-board']['ships'] = build_dict_list(Ship.get_by_board(enemy_board.id))
 
     return status
+
+
+def attack_ship(game_code, player, space):
+    # Function intended to be called after game has started, in order to attack opponents board
+    # needs complementing javascript file to actually "get" the attacked space
+    status = check_game_status(game_code, player)  # check the game status to make sure that you can actually attack
+    if status['ready'] is False:
+        print('not ready to attack, maybe throw an exception or something?')
+    game = Game.get_by_access_code(game_code)    # get the right game
+    enemy = get_enemy_board(game, player)
+    # use given space to attack enemy board, i.e.
+    attack = AttackMoves.attack(enemy, space)
+    if attack == "Hit":
+        print("return a red colored square for attacked space")
+    else:
+        print("return a white colored square for attacked space")
+    # If ship is sunk, increment score by 1? Not sure how it is counted
+    # presumably the javascript will keep track of keeping this function being called, until the score == 5,
+        # then whoever gets 5 first wins
