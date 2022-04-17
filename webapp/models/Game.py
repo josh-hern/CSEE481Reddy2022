@@ -6,6 +6,8 @@ from models.Board import Board
 import datetime
 import random, string
 
+from models.Ship import Ship
+
 
 class Game(Base, BaseModel):
     __tablename__ = "Game"
@@ -40,3 +42,28 @@ class Game(Base, BaseModel):
             game = session.query(cls).filter(cls.Code == code).first()
 
         return game
+
+    @classmethod
+    def check_winner(cls, game_id):
+        game = Game.get_by_id(game_id)
+        board1 = Board.get_by_id(game.Board1)
+        board2 = Board.get_by_id(game.Board2)
+
+        ships1 = Ship.get_by_board(board1.id)
+        alive1 = False
+        for ship in ships1:
+            if ship.isSunk is False:
+                alive1 = True
+
+        ships2 = Ship.get_by_board(board2.id)
+        alive2 = False
+        for ship in ships2:
+            if ship.isSunk is False:
+                alive2 = True
+
+        if not alive1 or not alive2:
+            game = Game.update(game.id, {"Winner": (board1.PlayerName if alive1 else board2.PlayerName)})
+            return game
+
+        else:
+            return False

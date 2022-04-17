@@ -73,3 +73,11 @@ def check_game_status_route():
     response = check_game_status(request_json['code'], request_json['name']);
     return json.dumps(response)
 
+
+@api.route('/api/attack_space', methods=['POST'])
+def attack_space_route():
+    request_json = request.get_json()
+    response = attack_ship(request_json['code'], request_json['name'], request_json['cell']);
+    return json.dumps(response)
+
+

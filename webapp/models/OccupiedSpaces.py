@@ -14,12 +14,21 @@ class OccupiedSpaces(Base, BaseModel):
     ShipID = Column(String, nullable=False)
     Position = Column(String, nullable=False)
     isHit = Column(Boolean, default=False)
+    isSunk = Column(Boolean, default=False)
 
     @classmethod
     def get_by_board(cls, board_to_be_got):
         entry = None
         with Database.get_session() as session:
             entry = session.query(cls).filter(cls.BoardID == board_to_be_got).all()
+
+        return entry
+
+    @classmethod
+    def get_by_ship(cls, ship_to_be_got):
+        entry = None
+        with Database.get_session() as session:
+            entry = session.query(cls).filter(cls.ShipID == ship_to_be_got).all()
 
         return entry
 

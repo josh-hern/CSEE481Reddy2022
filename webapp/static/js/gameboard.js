@@ -29,8 +29,8 @@ window.onload = () => {
   document.querySelector('#rotate-button').classList.remove('hide');
 }
 
-const removeAllEventListeners = () => {
-  allCells = document.querySelectorAll("#my-board td.table-cell");
+const removeAllEventListeners = (board = "my-board") => {
+  allCells = document.querySelectorAll("#"+ board +" td.table-cell");
   allCells.forEach((cell) => {
     let cellClone = cell.cloneNode(true);
     cell.parentNode.replaceChild(cellClone, cell);
@@ -81,11 +81,11 @@ const setupListeners = () => {
     cell.addEventListener('mouseout', () => {unHighlightSpaces(cell, shipLength)})
     cell.addEventListener('click', () => {placeShip(cell, shipName, shipLength)})
   })
-
   document.querySelector('#command').innerHTML = "Place your: " + shipName;
 }
 
 const highlightSpaces = (cell, shipLength) => {
+  cell.dataset.color = cell.style.backgroundColor
   if(!hasConflicts(cell, shipLength)) {
     cell.style.backgroundColor = '#dedede';
     if(rotate) {
@@ -107,7 +107,7 @@ const highlightSpaces = (cell, shipLength) => {
 
 const unHighlightSpaces = (cell, shipLength) => {
   if(!hasConflicts(cell, shipLength)) {
-    cell.style.backgroundColor = 'transparent';
+    cell.style.backgroundColor = (cell.dataset.color? cell.dataset.color :'transparent');
     if(rotate) {
       for (let i = 1; i < shipLength; i++) {
         let offset = parseInt(cell.dataset.y) + i
@@ -204,16 +204,39 @@ const hasConflicts = (cell, shipLength) => {
   return false;
 }
 
-const buildBoard = (board, spaces) => {
-  wipeBoard(board);
+const buildBoard = (board, spaces, wipe = true) => {
+  if(wipe)
+    wipeBoard(board);
   spaces.forEach((space, i) => {
     let y = dataset_y_to_number[space['Position'][0]]
     let x = space['Position'].substring(1);
     let tmpCell = document.querySelector("#" + board + " [data-y='" + y + "'][data-x='" + x + "']");
-    tmpCell.style.backgroundColor = "green";
-  });
 
+    if(space['isAHit']=="False") {
+      tmpCell.style.backgroundColor = "gray";
+    }
+    if(space['isAHit']=="True") {
+      if(space['isSunk']=="True"){
+        tmpCell.style.backgroundColor = "black";
+      } else {
+        tmpCell.style.backgroundColor = "red";
+      }
+    }
+
+    if(space['isHit']=="False") {
+      tmpCell.style.backgroundColor = "green";
+    }
+    if(space['isHit']=="True") {
+      if(space['isSunk']=="True"){
+        tmpCell.style.backgroundColor = "black";
+      } else {
+        tmpCell.style.backgroundColor = "red";
+      }
+    }
+
+  });
 }
+
 
 const wipeBoard = (board) => {
   for (let i = 1; i < 11; i++) {
@@ -231,10 +254,31 @@ const confirmSetup = (game, player) => {
       setupListeners();
     } else {
       removeAllEventListeners();
+      removeAllEventListeners("enemy-board");
+      boardData['aliveCells'] = [];
       removeRotate();
       document.querySelector("#enemy-board").classList.remove("hide");
       document.querySelector('#command').innerHTML = "Starting Game...";
       setTimeout(checkGameStatus, 1000)
     }
+  })
+}
+
+const allowAttack = () => {
+  allCells = document.querySelectorAll("#enemy-board td.table-cell");
+  console.log(allCells);
+  allCells.forEach((cell) => {
+    cell.addEventListener('mouseover', () => {highlightSpaces(cell, 1)})
+    cell.addEventListener('mouseout', () => {unHighlightSpaces(cell, 1)})
+    cell.addEventListener('click', () => {attackSpace(cell)})
+  })
+}
+
+const attackSpace = cell => {
+  space = dataset_y_to_letter[cell.dataset.y] + cell.dataset.x
+  postData('/api/attack_space', {"name": document.querySelector('#player-name').value, "code": document.querySelector('#game-code').value, "cell": space}).then(data => {
+    buildBoard("enemy-board", data['enemy-board']['attack-spaces'])
+    removeAllEventListeners("enemy-board");
+    console.log(data);
   })
 }

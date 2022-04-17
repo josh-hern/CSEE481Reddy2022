@@ -105,10 +105,12 @@ def check_game_status(game_code, player):
     status = {
         'ready': (True if (enemy_board and board.isSetup and enemy_board.isSetup) else False),
         'current': None,
+        'winner': None,
         'player-board': {
             'id': None,
             'isSetup': False,
             'occupied-spaces': list(),
+            'attack-spaces': list(),
             'ships': list()
         }, 'enemy-board': {
             'id': None,
@@ -121,6 +123,7 @@ def check_game_status(game_code, player):
     status['player-board']['id'] = board.id
     status['player-board']['isSetup'] = board.isSetup
     status['player-board']['occupied-spaces'] = build_dict_list(OccupiedSpaces.get_by_board(board.id))
+    status['player-board']['attack-spaces'] = build_dict_list(AttackMoves.get_by_board(board.id))
     status['player-board']['ships'] = build_dict_list(Ship.get_by_board(board.id))
 
     if enemy_board:
@@ -135,6 +138,9 @@ def check_game_status(game_code, player):
 
         status['current'] = game.CurrentTurn
 
+        if game.Winner:
+            status['winner'] = game.Winner
+
     return status
 
 
@@ -142,16 +148,23 @@ def attack_ship(game_code, player, space):
     # Function intended to be called after game has started, in order to attack opponents board
     # needs complementing javascript file to actually "get" the attacked space
     status = check_game_status(game_code, player)  # check the game status to make sure that you can actually attack
-    if status['ready'] is False:
-        print('not ready to attack, maybe throw an exception or something?')
-    game = Game.get_by_access_code(game_code)    # get the right game
-    enemy = get_enemy_board(game, player)
-    # use given space to attack enemy board, i.e.
-    attack = AttackMoves.attack(enemy, space)
-    if attack == "Hit":
-        print("return a red colored square for attacked space")
-    else:
-        print("return a white colored square for attacked space")
-    # If ship is sunk, increment score by 1? Not sure how it is counted
-    # presumably the javascript will keep track of keeping this function being called, until the score == 5,
+    if not status['ready']:
+        return False
+
+    elif status['current'] == player:
+        game = Game.get_by_access_code(game_code)    # get the right game
+        board = get_board(game, player)
+        enemy = get_enemy_board(game, player)
+        # use given space to attack enemy board, i.e.
+        AttackMoves.attack(enemy, space)
+
+        Game.check_winner(game.id)
+        Game.update(game.id, {'CurrentTurn': enemy.PlayerName})
+
+        return check_game_status(game_code, player)
+        # If ship is sunk, increment score by 1? Not sure how it is counted
+        # presumably the javascript will keep track of keeping this function being called, until the score == 5,
         # then whoever gets 5 first wins
+
+    else:
+        return False

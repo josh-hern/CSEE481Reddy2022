@@ -2,7 +2,7 @@ import pytest
 from database.database_object import Database
 from models.Game import Game
 from models.Player import Player
-from tests.fixtures import constructed_database, add_default_boards, add_default_game
+from tests.fixtures import constructed_database, add_default_boards, add_example_board2, add_example_board, add_default_game
 
 
 class TestGame:
@@ -22,3 +22,7 @@ class TestGame:
         code = game.Code
 
         assert game.id == Game.get_by_access_code(code).id
+
+    def test_check_winner(self, constructed_database, add_default_game, add_default_boards, add_example_board):
+        game = Game.get_by_id(1)
+        game.check_winner(game.id)

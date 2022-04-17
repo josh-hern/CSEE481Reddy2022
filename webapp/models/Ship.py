@@ -10,7 +10,7 @@ class Ship(Base, BaseModel):
 
     ShipName = Column('ShipName', String)
     BoardID = Column(Integer, ForeignKey('Board.id'))
-    isSunk = Column('isSunk', Boolean)
+    isSunk = Column('isSunk', Boolean, default=False)
     length = Column(Integer)
 
     @classmethod
@@ -77,6 +77,21 @@ class Ship(Base, BaseModel):
             entry = session.query(cls).filter(cls.BoardID == board_to_be_got).all()
 
         return entry
+
+    def check_if_sunk(self):
+        spaces = OccupiedSpaces.get_by_ship(self.id)
+        sunk = True
+        for space in spaces:
+            if not space.isHit:
+                sunk = False
+
+        if sunk:
+            Ship.update(self.id, {"isSunk": True})
+            space_pos = list()
+            for space in spaces:
+                OccupiedSpaces.update(space.id, {"isSunk": True})
+
+        return sunk
 
 
 class InvalidShipNameException(Exception):

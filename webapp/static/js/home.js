@@ -1,6 +1,7 @@
 document.getElementById('start-web').addEventListener('click', (e) => {
   document.getElementById('start-game-prompt').classList.add('hide');
   document.getElementById('my-board').classList.remove('hide');
+  document.getElementById('command').classList.remove('hide');
   startGame()
 })
 
@@ -12,6 +13,7 @@ const startGame = () => {
   document.getElementById('player-name').value == "" ? document.getElementById('player-name').value = "Bingus" : ""
   let name = document.getElementById('player-name').value == "" ? "Bingus" : document.getElementById('player-name').value
   document.getElementById('name-area').classList.add('hide');
+  document.getElementById('command').classList.remove('hide');
 
   postData('/api/start_game', {"name": name}).then(data => {
     document.getElementById('header-text').innerHTML = "Game Code: " + data
@@ -29,12 +31,14 @@ const joinGame = async () => {
   postData('/api/join_from_web', {"name": name, "code": code}).then(data => {
     document.getElementById('start-game-prompt').classList.add('hide');
     document.getElementById('my-board').classList.remove('hide');
+    document.getElementById('command').classList.remove('hide');
     document.getElementById('name-area').classList.add('hide');
     if(data) {
       if(!data['ready']) {
         console.log(data);
         document.getElementById('header-text').innerHTML = "Game Code: " + code
         document.getElementById('game-code').value = code
+        document.querySelector('#command').innerHTML = "Place your: Battleship";
 
       }
       else {
@@ -68,16 +72,38 @@ async function postData(url = '', data = {}) {
   return response.json(); // parses JSON response into native JavaScript objects
 }
 
+let current = null;
 
 const checkGameStatus = (loop=true) => {
   let name = document.getElementById('player-name').value
   let code = document.getElementById('game-code').value
   postData('/api/check_game_status', {"name": name, "code": code}).then(data => {
     console.log(data);
-    buildBoard("my-board", data['player-board']['occupied-spaces'])
-    buildBoard("enemy-board", data['enemy-board']['attack-spaces'])
+    if(data['current'] != current) {
+      buildBoard("my-board", data['player-board']['occupied-spaces'])
+      buildBoard("my-board", data['player-board']['attack-spaces'], false)
+      buildBoard("enemy-board", data['enemy-board']['attack-spaces'])
+      current = data['current']
 
+      if(!data['ready']) {
+        document.querySelector('#command').innerHTML = "Waiting on other player...";
+      }
+      else {
+        if(data['current'] == name) {
+          document.querySelector('#command').innerHTML = "Your turn!";
+          allowAttack();
+        }
+        else {
+          document.querySelector('#command').innerHTML = data['current'] + "'s turn"
+        }
+      }
+    }
 
-    setTimeout(checkGameStatus, 1000);
+    if(data['winner'] == null) {
+      setTimeout(checkGameStatus, 1000);
+    } else {
+      document.querySelector('#command').innerHTML = data['winner'] + " has Won!";
+    }
+
   })
 }
