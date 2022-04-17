@@ -173,7 +173,7 @@ const pushShipToObject = (cell, shipName, shipLength) => {
 
   postData('/api/place_ship', s).then(data => {
     buildBoard("my-board", data);
-    confirmSetup();
+    confirmSetup()
   })
 }
 
@@ -230,9 +230,11 @@ const confirmSetup = (game, player) => {
       currentShipIndex++;
       setupListeners();
     } else {
+      removeAllEventListeners();
       removeRotate();
       document.querySelector("#enemy-board").classList.remove("hide");
       document.querySelector('#command').innerHTML = "Starting Game...";
+      setTimeout(checkGameStatus, 1000)
     }
   })
 }

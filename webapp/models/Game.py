@@ -14,7 +14,7 @@ class Game(Base, BaseModel):
     End = Column('End', DATETIME, nullable=True)
     Code = Column(String)
     isSetup = Column('isSetup', Boolean, default=False)
-    CurrentTurnBoard = Column('CurrentTurnBoard', Integer, ForeignKey('Board.id'))
+    CurrentTurn = Column(String, nullable=True)
     Board1 = Column(Integer, ForeignKey('Board.id'), nullable=True)
     Board2 = Column(Integer, ForeignKey('Board.id'), nullable=True)
     Winner = Column('Winner', String)

@@ -5,14 +5,12 @@ document.getElementById('start-web').addEventListener('click', (e) => {
 })
 
 document.getElementById('join-game').addEventListener('click', (e) => {
-  document.getElementById('start-game-prompt').classList.add('hide');
-  document.getElementById('my-board').classList.remove('hide');
   joinGame()
 })
 
 const startGame = () => {
   document.getElementById('player-name').value == "" ? document.getElementById('player-name').value = "Bingus" : ""
-  name = document.getElementById('player-name').value == "" ? "Bingus" : document.getElementById('player-name').value
+  let name = document.getElementById('player-name').value == "" ? "Bingus" : document.getElementById('player-name').value
   document.getElementById('name-area').classList.add('hide');
 
   postData('/api/start_game', {"name": name}).then(data => {
@@ -21,15 +19,34 @@ const startGame = () => {
   })
 }
 
-const joinGame = () => {
+const joinGame = async () => {
   document.getElementById('player-name').value == "" ? document.getElementById('player-name').value = "Bingus" : ""
-  name = document.getElementById('player-name').value == "" ? "Bingus" : document.getElementById('player-name').value
-  document.getElementById('name-area').classList.add('hide');
-  code = document.getElementById('game-code-input').value
+  let name = document.getElementById('player-name').value == "" ? "Bingus" : document.getElementById('player-name').value
+  let code = document.getElementById('game-code-input').value
+  document.getElementById('header-text').innerHTML = "Game Code: " + code
+  document.getElementById('game-code').value = code
 
   postData('/api/join_from_web', {"name": name, "code": code}).then(data => {
-    document.getElementById('header-text').innerHTML = "Game Code: " + data
-    document.getElementById('game-code').value = code
+    document.getElementById('start-game-prompt').classList.add('hide');
+    document.getElementById('my-board').classList.remove('hide');
+    document.getElementById('name-area').classList.add('hide');
+    if(data) {
+      if(!data['ready']) {
+        console.log(data);
+        document.getElementById('header-text').innerHTML = "Game Code: " + code
+        document.getElementById('game-code').value = code
+
+      }
+      else {
+        buildBoard("my-board", data['player-board']['occupied-spaces'])
+        buildBoard("enemy-board", data['enemy-board']['attack-spaces'])
+        confirmSetup()
+      }
+    }
+    else {
+      document.getElementById('header-text').innerHTML = "An Error Occurred"
+    }
+
   })
 }
 
@@ -49,4 +66,18 @@ async function postData(url = '', data = {}) {
     body: JSON.stringify(data) // body data type must match "Content-Type" header
   });
   return response.json(); // parses JSON response into native JavaScript objects
+}
+
+
+const checkGameStatus = (loop=true) => {
+  let name = document.getElementById('player-name').value
+  let code = document.getElementById('game-code').value
+  postData('/api/check_game_status', {"name": name, "code": code}).then(data => {
+    console.log(data);
+    buildBoard("my-board", data['player-board']['occupied-spaces'])
+    buildBoard("enemy-board", data['enemy-board']['attack-spaces'])
+
+
+    setTimeout(checkGameStatus, 1000);
+  })
 }

@@ -1,3 +1,5 @@
+import random
+
 from models.AttackMoves import AttackMoves
 from models.BaseModel import WhatTheFuckException
 from models.Game import Game
@@ -14,12 +16,22 @@ def start_new_game(player1_name):
 def join_from_web(game_code, player):
     game = Game.get_by_access_code(game_code)
     if game.Board2 is None:
-        board = Board.create_board(game.id, player)
-        Game.update(game.id, {"Board2": board.id})
-        return True
+        if Board.get_by_id(game.Board1).PlayerName == player:
+            return False
+        else:
+            board = Board.create_board(game.id, player)
+            Game.update(game.id, {"Board2": board.id})
+            return check_game_status(game_code, player)
 
     else:
-        raise WhatTheFuckException()
+        board1 = Board.get_by_id(game.Board1)
+        board2 = Board.get_by_id(game.Board2)
+
+        if board1.PlayerName == player or board2.PlayerName == player:
+            return check_game_status(game_code, player)
+
+        else:
+            return False
 
 
 def get_board(game, player):
@@ -83,10 +95,16 @@ def confirm_setup(game_code, player):
 def check_game_status(game_code, player):
     game = Game.get_by_access_code(game_code)
     board = get_board(game, player)
-    enemy_board = get_enemy_board(game, player)
+    enemy_board = None
+
+    try:
+        enemy_board = get_enemy_board(game, player)
+    except WhatTheFuckException():
+        pass
 
     status = {
-        'ready': board.isSetup and enemy_board.isSetup,
+        'ready': (True if (enemy_board and board.isSetup and enemy_board.isSetup) else False),
+        'current': None,
         'player-board': {
             'id': None,
             'isSetup': False,
@@ -105,9 +123,16 @@ def check_game_status(game_code, player):
     status['player-board']['occupied-spaces'] = build_dict_list(OccupiedSpaces.get_by_board(board.id))
     status['player-board']['ships'] = build_dict_list(Ship.get_by_board(board.id))
 
-    status['enemy-board']['id'] = enemy_board.id
-    status['enemy-board']['isSetup'] = enemy_board.isSetup
-    status['enemy-board']['attack-spaces'] = build_dict_list(AttackMoves.get_by_board(enemy_board.id))
-    status['enemy-board']['ships'] = build_dict_list(Ship.get_by_board(enemy_board.id))
+    if enemy_board:
+        status['enemy-board']['id'] = enemy_board.id
+        status['enemy-board']['isSetup'] = enemy_board.isSetup
+        status['enemy-board']['attack-spaces'] = build_dict_list(AttackMoves.get_by_board(enemy_board.id))
+        status['enemy-board']['ships'] = build_dict_list(Ship.get_by_board(enemy_board.id))
+
+    if status['ready']:
+        if not game.CurrentTurn:
+            Game.update(game.id, {"CurrentTurn": random.choice([board.PlayerName, enemy_board.PlayerName])})
+
+        status['current'] = game.CurrentTurn
 
     return status

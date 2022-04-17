@@ -43,10 +43,11 @@ class TestGame:
     def test_join_from_web(self, constructed_database, add_default_game, add_board1):
         game = Game.get_by_id(1)
 
+        assert not join_from_web(game.Code, "Player1")
         assert join_from_web(game.Code, "subwayjared")
+        assert join_from_web(game.Code, "Player1")
 
-        with pytest.raises(WhatTheFuckException) as e:
-            join_from_web(game.Code, "sneakypete")
+        assert not join_from_web(game.Code, "sneakypete")
 
     def test_get_board(self, constructed_database, add_default_game, add_default_boards):
         game = Game.get_by_id(1)

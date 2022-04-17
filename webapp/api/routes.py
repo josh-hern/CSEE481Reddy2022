@@ -67,9 +67,9 @@ def join_from_web_route():
     return json.dumps(response)
 
 
-@api.route('/api/check_game_status', methods=['GET'])
+@api.route('/api/check_game_status', methods=['POST'])
 def check_game_status_route():
     request_json = request.get_json()
-    response = check_game_status(request_json['game'], request_json['name']);
+    response = check_game_status(request_json['code'], request_json['name']);
     return json.dumps(response)
 
