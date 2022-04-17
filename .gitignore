@@ -1,4 +1,3 @@
 /database/battleship_database.db
 /Pipfile.lock
 __pycache__/
-/webapp/database/battleship_database.db
