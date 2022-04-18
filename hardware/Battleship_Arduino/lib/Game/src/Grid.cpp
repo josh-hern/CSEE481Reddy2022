@@ -46,10 +46,13 @@ TemporalCell* Grid::getCell(int8_t x, int8_t y){
 }
 
 void Grid::drawCell(TemporalCell* cell){
-    if(cell == NULL) return;
-    if(cell->location.x > 9 || cell->location.y >9) return;
+    if(cell == NULL) return; // return if there is no cell
+    if(cell->location.x > 9 || cell->location.y >9) return; // return if out of bounds (prob not necessary)
+
+    // get the cell's offset from 0 based on scale, and add grid offset
     uint8_t x_value = (cell->location.x*cell_scale) + x_position;
     uint8_t y_value = (cell->location.y*cell_scale) + y_position;
+
     if(cell->isSelected()){
         uint8_t value = cell->current_value;
         uint16_t color = (value < 3 && value > 0)? colors[cell->current_value] : BACKGROUND_BLUE;

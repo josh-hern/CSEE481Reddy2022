@@ -15,6 +15,8 @@ Button::Button(uint8_t pinNumber, void (*isr)()){
     attachInterrupt(pinNumber, isr, FALLING);
 }
 
+// Called when a button is pressed; will call the assigned handler callback
+// if the appropriate amount of time has passed
 void Button::stateChangeISR(){
     auto gotSemaphore = xSemaphoreTake(isrSemaphore, 0);
     if(gotSemaphore == pdFALSE){

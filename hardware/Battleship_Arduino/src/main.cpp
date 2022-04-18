@@ -360,6 +360,7 @@ void decX(){
 void rotate(){
   rot++;
   rot %= 4;
+  game->carrier->setRotation(rot);
 }
 
 void setup(){
@@ -374,6 +375,7 @@ void setup(){
   inputs->left->setHandler(decX);
   inputs->right->setHandler(incX);
   inputs->a->setHandler(rotate);
+  inputs->b->setHandler(rotate);
 
   Serial.println("Initializing screen");
   tft.init(135, 240); 
@@ -393,8 +395,8 @@ void setup(){
 
 void loop(){
 
-  //game->draw();
-  game->drawShip(Coordinates{x, y}, rot);
+  game->draw();
+  //game->drawShip(Coordinates{x, y}, rot);
 
   vTaskDelay(pdMS_TO_TICKS(100));
 

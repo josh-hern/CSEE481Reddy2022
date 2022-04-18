@@ -18,6 +18,7 @@ class Ship{
         bool fitsAt(int8_t x, int8_t y);
         void blit();
         void unblit();
+        char* ship_type;
     
     private:
         Grid* grid;
@@ -33,27 +34,38 @@ class Ship{
 
 class Carrier: public Ship{
     public:
-        Carrier(Grid* grid): Ship((uint8_t)5, grid){}
+        Carrier(Grid* grid): Ship((uint8_t)5, grid){
+            ship_type = (char *) "Carrier";
+        }
+        
 };
 
 class Battleship: public Ship{
     public:
-        Battleship(Grid* grid): Ship((uint8_t)4, grid){}
+        Battleship(Grid* grid): Ship((uint8_t)4, grid){
+            ship_type = (char *) "Battleship";
+        }
 };
 
 class Destroyer: public Ship{
     public:
-        Destroyer(Grid* grid): Ship((uint8_t)3, grid){}
+        Destroyer(Grid* grid): Ship((uint8_t)3, grid){
+            ship_type = (char *) "Destroyer";
+        }
 };
 
 class Submarine: public Ship{
     public:
-        Submarine(Grid* grid): Ship((uint8_t)3, grid){}
+        Submarine(Grid* grid): Ship((uint8_t)3, grid){
+            ship_type = (char *) "Submarine";
+        }
 };
 
 class PatrolBoat: public Ship{
     public:
-        PatrolBoat(Grid* grid): Ship((uint8_t)2, grid){}
+        PatrolBoat(Grid* grid): Ship((uint8_t)2, grid){
+            ship_type = (char *) "PatrolBoat";
+        }
 };
 
 

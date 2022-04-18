@@ -1,5 +1,6 @@
 #include "Ships.h"
 #include <Arduino.h>
+#include <typeinfo>
 
 Ship::Ship(uint8_t ship_length, Grid* grid_canvas){
     initialize_rotations();
@@ -30,7 +31,8 @@ void Ship::setPosition(Coordinates coords){
     for(uint8_t i=0; i<length; i++){
         TemporalCell* cell = ship_cells[i];
         if(cell != NULL){
-            cell->occupyingShip = NULL;
+            //only set to null if we're the owner
+            if(cell->occupyingShip == this) cell->occupyingShip = NULL;
             cell->setValue((uint8_t) 0);
         }
     }
@@ -117,8 +119,21 @@ bool Ship::fitsAt(int8_t x, int8_t y){
     for (uint8_t i=0; i<length; i++){
         Coordinates c = ship_coords[i];
         TemporalCell* cell = grid->getCell(c.x, c.y);
-        if(cell == NULL || 
-            (cell->occupyingShip != NULL && cell->occupyingShip != this)) return false;
+        if(cell == NULL){
+            Serial.printf("Does not fit because cell is null for %s\n", ship_type);
+            return false;
+        }
+        if(cell->occupyingShip != NULL && cell->occupyingShip != this){
+            Serial.printf("Does not fit because occupied by %s:\n"
+                "\tx: %d\n\ty: %d\n", cell->occupyingShip->ship_type,
+                cell->location.x, cell->location.y);
+            return false;
+        }
+        // if(cell->occupyingShip != NULL){
+        //     Serial.printf("Ship may fit, %s occupies this cell:\n"
+        //     "\tx: %d\n\ty: %d\n", cell->occupyingShip->ship_type,
+        //     cell->location.x, cell->location.y);
+        // }
     }
 
     uint8_t num_adjacent_cells = (length * 2) + 6; // 6 because can't be diagonal
@@ -177,7 +192,7 @@ void Ship::getShipCells(int8_t x, int8_t y, TemporalCell* dest[]){
     getShipCellCoordinates(x, y, coords);
 
     for(uint8_t i=0; i<length; i++){
-        dest[i] = grid->getCell(x, y);
+        dest[i] = grid->getCell(coords[i].x, coords[i].y);
     }
 }
 
@@ -199,8 +214,13 @@ void Ship::blit(){
 }
 
 void Ship::unblit(){
+    
     for(int i=0; i<length; i++){
         TemporalCell* cell = ship_cells[i];
-        if(cell != NULL) cell->setValue((uint8_t) 0);
+        if(cell != NULL){
+            cell->setValue((uint8_t) 0);
+        } else{
+            Serial.printf("Error: cell value was NULL for ship %s\n", ship_type);
+        }
     }
 }
