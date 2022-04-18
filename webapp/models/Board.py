@@ -12,6 +12,13 @@ class Board(Base, BaseModel):
     GameID = Column(Integer, ForeignKey('Game.id'), nullable=False)
 
     @classmethod
+    def get_by_player(cls, player):
+        entry = None
+        with Database.get_session() as session:
+            entry = session.query(cls).filter(cls.PlayerName == player).first()
+        return entry
+
+    @classmethod
     def create_board(cls, game, owner):
         board = Board()
 

@@ -168,3 +168,15 @@ def attack_ship(game_code, player, space):
 
     else:
         return False
+
+
+def check_stats(player):
+    game_ids = [Board.get_by_player(player).GameID]  # gets list of game ids for any given player
+    old_game_codes = {}  # Ideally creates dictionary in following format:
+    # {<game code 1>: [<start time>, <winner>], <game code 2>: [<start time>, <winner>], ...}
+    for game_id in game_ids:
+        game_code = Game.get_by_id(game_id).Code  # gets the game code for each game id
+        start_time = Game.get_by_id(game_id).Start  # gets the start time for each game id
+        winner = Game.get_by_id(game_id).Winner  # gets the winner for each game id
+        old_game_codes[game_code] = [start_time, winner]  # adds to dictionary
+    return old_game_codes

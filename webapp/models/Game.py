@@ -44,6 +44,14 @@ class Game(Base, BaseModel):
         return game
 
     @classmethod
+    def get_by_game_id(cls, game_id):
+        game = None
+        with Database.get_session() as session:
+            game = session.query(cls).filter(cls.GameID == game_id).first()
+
+        return game
+
+    @classmethod
     def check_winner(cls, game_id):
         game = Game.get_by_id(game_id)
         board1 = Board.get_by_id(game.Board1)

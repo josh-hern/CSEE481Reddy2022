@@ -83,3 +83,11 @@ class TestGame:
         assert check_game_status(game.Code, board.PlayerName)['ready']
         assert check_game_status(game.Code, board.PlayerName)['player-board']['isSetup']
         assert check_game_status(game.Code, board.PlayerName)['enemy-board']['isSetup']
+
+    def test_check_stats(self, constructed_database, add_default_game, add_default_boards):
+        player = "Player1"
+        return_value = check_stats(player)
+        print(return_value)
+        # so far this only checks using the default boards, which means that it only tests the bare minimum of
+        # functioning. If possible, I would like to add more boards for each player, and make some of them wins/losses
+        assert return_value
