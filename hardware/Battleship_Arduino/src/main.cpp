@@ -379,7 +379,7 @@ void setup(){
 
   Serial.println("Initializing screen");
   tft.init(135, 240); 
-  tft.fillScreen(BACKGROUND_BLUE);
+  tft.fillScreen(COLOR_LIGHT_BLUE);
 
   x = 4;
   y = 4;

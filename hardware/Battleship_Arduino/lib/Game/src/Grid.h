@@ -8,8 +8,10 @@
 
 class Ship;
 
-#define BACKGROUND_BLUE     0x4c78
-#define SELECTED_CELL_COLOR 0xF800
+#define COLOR_LIGHT_BLUE        0x4c78
+#define COLOR_SELECTED          0xF800
+#define COLOR_GREEN             0x07e0
+#define COLOR_DOESNT_FIT        COLOR_SELECTED
 
 class Coordinates{
     public:
@@ -34,8 +36,8 @@ class Coordinates{
 class TemporalCell{
     public:
 
-        uint8_t current_value;
-        uint8_t previous_value;
+        uint16_t current_value;
+        uint16_t previous_value;
         Coordinates location;
         Ship* occupyingShip;
         bool selected;
@@ -48,7 +50,7 @@ class TemporalCell{
             occupyingShip = NULL;
         }
 
-        void setValue(uint8_t value){
+        void setValue(uint16_t value){
             previous_value = current_value;
             current_value = value;
         }
@@ -101,7 +103,6 @@ class Grid{
         TemporalCell* selectedCell;
         TemporalCell* grid[10][10];
         Adafruit_ST7789* display;
-        uint16_t colors[3] = {0xFFFF, 0xF800, 0x07e0}; 
 };
 
 #endif

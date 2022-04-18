@@ -33,7 +33,7 @@ void Ship::setPosition(Coordinates coords){
         if(cell != NULL){
             //only set to null if we're the owner
             if(cell->occupyingShip == this) cell->occupyingShip = NULL;
-            cell->setValue((uint8_t) 0);
+            cell->setValue((uint16_t) 0);
         }
     }
     getShipCells(position.x, position.y, ship_cells);
@@ -63,7 +63,7 @@ void Ship::placeOnGrid(Coordinates coords){
         if(cell->occupyingShip != NULL){
             Serial.println("ERROR: cell has a ship already and should not");
             Serial.printf("Index: %d, x: %d, y: %d\n", i, cell->location.x, cell->location.y);
-            Serial.printf("Pointer: %X\n", cell->occupyingShip);
+            Serial.printf("Pointer: %X\n", ((unsigned int)cell->occupyingShip));
             return;
         }
         cell->occupyingShip = this;
@@ -205,7 +205,7 @@ void Ship::blit(){
         Coordinates c = ship_coordinates[i];
         TemporalCell* cell = grid->getCell(c.x, c.y);
         ship_cells[i] = cell;
-        uint8_t value = (fits)? 2 : 1;
+        uint16_t value = (fits)? COLOR_GREEN : COLOR_DOESNT_FIT;
         if(cell != NULL){
             cell->setValue(value);
             grid->drawCell(cell);
@@ -218,7 +218,7 @@ void Ship::unblit(){
     for(int i=0; i<length; i++){
         TemporalCell* cell = ship_cells[i];
         if(cell != NULL){
-            cell->setValue((uint8_t) 0);
+            cell->setValue((uint16_t) 0);
         } else{
             Serial.printf("Error: cell value was NULL for ship %s\n", ship_type);
         }

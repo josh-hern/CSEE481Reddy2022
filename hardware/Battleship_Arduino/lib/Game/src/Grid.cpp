@@ -53,17 +53,21 @@ void Grid::drawCell(TemporalCell* cell){
     uint8_t x_value = (cell->location.x*cell_scale) + x_position;
     uint8_t y_value = (cell->location.y*cell_scale) + y_position;
 
+    // drawing the cell if it's selected
     if(cell->isSelected()){
-        uint8_t value = cell->current_value;
-        uint16_t color = (value < 3 && value > 0)? colors[cell->current_value] : BACKGROUND_BLUE;
-        display->fillRect(x_value, y_value, cell_scale, cell_scale, SELECTED_CELL_COLOR);
+        uint16_t color = cell->current_value;
+        if(color == 0) color = COLOR_LIGHT_BLUE;
+        display->fillRect(x_value, y_value, cell_scale, cell_scale, COLOR_SELECTED);
         display->fillRect(
             x_value+2, y_value+2, cell_scale - 4, cell_scale - 4, color
         );
  
-    } else {
-        uint8_t value = cell->current_value;
-        uint16_t color = (value < 3 && value > 0)? colors[cell->current_value] : BACKGROUND_BLUE;        display->drawRect(x_value, y_value, cell_scale, cell_scale, 0xFFFF);
+    } 
+    // drawing the cell if it's not selected
+    else {
+        uint16_t color = cell->current_value;
+        if(color == 0) color = COLOR_LIGHT_BLUE;      
+        display->drawRect(x_value, y_value, cell_scale, cell_scale, 0xFFFF);
         display->fillRect(
             x_value+1, y_value+1, cell_scale - 2, cell_scale - 2, color
         );
