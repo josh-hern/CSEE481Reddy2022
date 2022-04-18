@@ -7,6 +7,8 @@
 #include "Grid.h"
 #include "Ships.h"
 #include "Board.h"
+#include "GameState.h"
+#include "Input.h"
 
 
 
@@ -22,11 +24,11 @@ class GameConfiguration{
 class Game{
 
     public:
-        Game(Adafruit_ST7789* tft, GameConfiguration* game_conf);
+        Game(Adafruit_ST7789* tft, GameConfiguration* game_conf, UserInputs* user_inputs);
         void draw();
-        void selectCell(Coordinates coords);
-        void drawShip(Coordinates coords, uint8_t rotation);
+        GameState* state;
         Board* board;
+        UserInputs* inputs;
 };
 
 

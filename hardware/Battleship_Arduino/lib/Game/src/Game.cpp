@@ -1,21 +1,20 @@
 #include "Game.h"
 #include "Board.h"
+#include "GameState.h"
+#include "PlaceShipsState.h"
 
-Game::Game(Adafruit_ST7789* tft, GameConfiguration* game_conf){
+extern PlaceShipsState* placeShipsState;
+
+Game::Game(Adafruit_ST7789* tft, GameConfiguration* game_conf, UserInputs* user_inputs){
+    inputs = user_inputs;
     board = new Board(tft, game_conf->fleet_configuration);
+    placeShipsState = new PlaceShipsState(board);
+    placeShipsState->attachInterrupts(inputs);
+    state = placeShipsState;
 }
 
 void Game::draw(){ 
-    Serial.println("Game calling draw");
-    board->draw();
+    //Serial.println("Game calling draw");
+    state->draw();
 }
 
-void Game::selectCell(Coordinates coords){
-    board->opponent_grid->selectCell(coords.x, coords.y);
-}
-
-void Game::drawShip(Coordinates coords, uint8_t rotation){
-    board->fleet->carrier->setRotation(rotation);
-    board->fleet->carrier->setPosition(coords);    
-    board->fleet->carrier->blit();
-}

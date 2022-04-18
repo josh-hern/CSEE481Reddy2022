@@ -9,15 +9,12 @@ Board::Board(Adafruit_ST7789* tft, FleetConfiguration* conf){
 }
 
 void Board::draw(){
-    Serial.println("Board about to draw grids");
     opponent_grid->draw();
     player_grid->draw();
 
-    Serial.println("Board about to draw ships");
     fleet->carrier->blit();
     fleet->battleship->blit();
     fleet->destroyer->blit();
     fleet->submarine->blit();
     fleet->patrolboat->blit();
-    Serial.println("Board has drawn ships");
 }

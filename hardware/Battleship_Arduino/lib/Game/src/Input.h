@@ -6,8 +6,8 @@
 #include <Arduino.h>
 #include <FreeRTOS.h>
 
-#define UP 35
-#define DOWN 36
+#define UP 36
+#define DOWN 35
 #define LEFT 39
 #define RIGHT 34
 #define A 25
