@@ -242,81 +242,6 @@ void testlines(uint16_t color) {
   }
 }
 
-/*
-void setup(void) {
-  Serial.begin(115200);
-  Serial.print(F("Hello! Gizmo TFT Test"));
-
-  //pinMode(TFT_BACKLIGHT, OUTPUT);
-  //digitalWrite(TFT_BACKLIGHT, HIGH); // Backlight on
-
-  tft.init(135, 240);                // Init ST7789 240x240
-  //tft.setRotation(2);
-
-  Serial.println(F("Initialized"));
-
-  uint16_t time = millis();
-  tft.fillScreen(ST77XX_BLACK);
-  time = millis() - time;
-
-  Serial.println(time, DEC);
-  delay(500);
-
-  // large block of text
-  tft.fillScreen(ST77XX_BLACK);
-  char* lorem_ipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur adipiscing ante sed nibh tincidunt feugiat. Maecenas enim massa, fringilla sed malesuada et, malesuada sit amet turpis. Sed porttitor neque ut ante pretium vitae malesuada nunc bibendum. Nullam aliquet ultrices massa eu hendrerit. Ut sed nisi lorem. In vestibulum purus a tortor imperdiet posuere. ";
-  testdrawtext(lorem_ipsum, ST77XX_WHITE);
-  delay(1000);
-
-  // tft print function!
-  tftPrintTest();
-  delay(4000);
-
-  // a single pixel
-  tft.drawPixel(tft.width()/2, tft.height()/2, ST77XX_GREEN);
-  delay(500);
-
-  // line draw test
-  testlines(ST77XX_YELLOW);
-  delay(500);
-
-  // optimized lines
-  testfastlines(ST77XX_RED, ST77XX_BLUE);
-  delay(500);
-
-  testdrawrects(ST77XX_GREEN);
-  delay(500);
-
-  testfillrects(ST77XX_YELLOW, ST77XX_MAGENTA);
-  delay(500);
-
-  tft.fillScreen(ST77XX_BLACK);
-  testfillcircles(10, ST77XX_BLUE);
-  testdrawcircles(10, ST77XX_WHITE);
-  delay(500);
-
-  testroundrects();
-  delay(500);
-
-  testtriangles();
-  delay(500);
-
-  mediabuttons();
-  delay(500);
-
-  Serial.println("done");
-  delay(1000);
-}
-
-void loop() {
-  tft.invertDisplay(true);
-  delay(500);
-  tft.invertDisplay(false);
-  delay(500);
-}
-
-*/
-
 #include <Input.h>
 
 Game* game;
@@ -327,7 +252,7 @@ uint8_t rot = 0;
 void incY(){
   if(y < 9){
     y++;
-    game->carrier->setPosition(Coordinates{x, y});
+    game->board->fleet->carrier->setPosition(Coordinates{x, y});
     game->selectCell(Coordinates{x, y});
   }
 }
@@ -336,7 +261,7 @@ void decY(){
   Serial.println("Dec y");
   if(y > 0){
     y--;
-    game->carrier->setPosition(Coordinates{x, y});
+    game->board->fleet->carrier->setPosition(Coordinates{x, y});
     game->selectCell(Coordinates{x, y});
   }
 }
@@ -344,7 +269,7 @@ void decY(){
 void incX(){
   if(x < 9){
     x++;
-    game->carrier->setPosition(Coordinates{x, y});
+    game->board->fleet->carrier->setPosition(Coordinates{x, y});
     game->selectCell(Coordinates{x, y});
   }
 }
@@ -352,7 +277,7 @@ void incX(){
 void decX(){
   if(x > 0){
     x--;
-    game->carrier->setPosition(Coordinates{x, y});
+    game->board->fleet->carrier->setPosition(Coordinates{x, y});
     game->selectCell(Coordinates{x, y});
   }
 }
@@ -360,7 +285,7 @@ void decX(){
 void rotate(){
   rot++;
   rot %= 4;
-  game->carrier->setRotation(rot);
+  game->board->fleet->carrier->setRotation(rot);
 }
 
 void setup(){
@@ -386,7 +311,7 @@ void setup(){
   Serial.println("Creating game");
   GameConfiguration* conf = new GameConfiguration();
   game = new Game(&tft, conf);
-  free(conf);
+  //free(conf);
   game->draw();
   game->selectCell({x, y});
   
@@ -399,17 +324,5 @@ void loop(){
   //game->drawShip(Coordinates{x, y}, rot);
 
   vTaskDelay(pdMS_TO_TICKS(100));
-
-  //rot++;
-
-  // if(x < 9){
-  //   x++;
-  // } else{
-  //   x = 0;
-  //   y++;
-  // }
-  // if(y > 9) y = 0;
-
-  //game->selectCell(Coordinates{x, y});
 
 }

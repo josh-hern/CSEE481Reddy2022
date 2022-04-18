@@ -224,3 +224,32 @@ void Ship::unblit(){
         }
     }
 }
+
+
+Fleet::Fleet(FleetConfiguration* conf, Grid* grid){
+    Serial.println("Creating fleet");
+    carrier = new Carrier(grid);
+    battleship = new Battleship(grid);
+    destroyer = new Destroyer(grid);
+    submarine = new Submarine(grid);
+    patrolboat = new PatrolBoat(grid);
+
+    Serial.println("Fleet created");
+
+    // CURSED WARNING: setRotation MUST be called before setPosition
+
+    carrier->setRotation(conf->carrier_conf->rotation);
+    battleship->setRotation(conf->battleship_conf->rotation);
+    destroyer->setRotation(conf->destroyer_conf->rotation);
+    submarine->setRotation(conf->submarine_conf->rotation);
+    patrolboat->setRotation(conf->patrolboat_conf->rotation);
+
+    carrier->setPosition(conf->carrier_conf->location);
+    
+    battleship->placeOnGrid(conf->battleship_conf->location);
+    destroyer->placeOnGrid(conf->destroyer_conf->location);
+    submarine->placeOnGrid(conf->submarine_conf->location);
+    patrolboat->placeOnGrid(conf->patrolboat_conf->location);
+
+    Serial.println("Fleet placed");
+}

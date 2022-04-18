@@ -68,6 +68,42 @@ class PatrolBoat: public Ship{
         }
 };
 
+class ShipConfiguration{
+    public:
+        ShipConfiguration(int8_t x, int8_t y, uint8_t rot_val){
+            location = Coordinates{x, y};
+            rotation = rot_val % 4;
+        }
+        Coordinates location;
+        uint8_t rotation;
+};
+
+class FleetConfiguration{
+    public:
+        FleetConfiguration(){
+            carrier_conf = new ShipConfiguration(4, 5, 0);
+            battleship_conf = new ShipConfiguration(0, 0, 0);
+            submarine_conf = new ShipConfiguration(2, 0, 0);
+            destroyer_conf = new ShipConfiguration(4, 0, 0);
+            patrolboat_conf = new ShipConfiguration(6, 0, 1);
+        }
+        ShipConfiguration* carrier_conf;
+        ShipConfiguration* battleship_conf;
+        ShipConfiguration* submarine_conf;
+        ShipConfiguration* destroyer_conf;
+        ShipConfiguration* patrolboat_conf;
+};
+
+class Fleet{
+    public:
+        Fleet(FleetConfiguration* conf, Grid* grid);
+        Carrier* carrier;
+        Battleship* battleship;
+        Destroyer* destroyer;
+        Submarine* submarine;
+        PatrolBoat* patrolboat;
+};
+
 
 
 #endif
