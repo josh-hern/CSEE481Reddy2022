@@ -80,4 +80,10 @@ def attack_space_route():
     response = attack_ship(request_json['code'], request_json['name'], request_json['cell']);
     return json.dumps(response)
 
+@api.route('/api/check_stats', methods=['GET'])
+def check_stats_route():
+    request_json = request.get_json()
+    response = check_game_status(request_json['name']);
+    return json.dumps(response)
+
 

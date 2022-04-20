@@ -4,9 +4,30 @@
 <div class="container">
   <div class="row mt-5">
     <div class="col">
-
+      <h3 id="header-text">Welcome to Battleship: ConneXtions</h3>
+      <input type="hidden" id="game-code" value="">
     </div>
   </div>
+  <div class="row py-3" id="name-area">
+    <div class="col">
+      <h5>Enter the gamer_tag you would like to search for:</h5>
+      <input type="text" class="form-control" id="player-name" placeholder="Bingus">
+    </div>
+  </div>
+  <div class="row">
+    <div class="m-3 col">
+      <p id="command" class="hide"></p>
+    </div>
+  </div>
+  <div class="row">
+    <!-- <div class="col"> -->
+      <div id="old_stats" class="col hide">
+        {% include 'components/stats.html' %}
+      </div>
+    <!-- </div> -->
+  </div>
 </div>
+<script type="text/javascript" src="/static/js/home.js"></script>
+<script type="text/javascript" src="/static/js/stats.js"></script>
 
 {% endblock %}
