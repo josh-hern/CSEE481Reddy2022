@@ -15,7 +15,7 @@ class Board(Base, BaseModel):
     def get_by_player(cls, player):
         entry = None
         with Database.get_session() as session:
-            entry = session.query(cls).filter(cls.PlayerName == player).first()
+            entry = session.query(cls).filter(cls.PlayerName == player).all()
         return entry
 
     @classmethod

@@ -14,20 +14,22 @@
       <input type="text" class="form-control" id="player-name" placeholder="testName">
     </div>
   </div>
-  <div class="row">
-    <div class="m-3 col">
-      <p id="command" class="hide"></p>
+  <div id="start-game-prompt">
+    <div class="row">
+      <div class="col mt-2">
+        <div class="btn btn-success" id="search_gamer_tag">search</div>
+      </div>
     </div>
   </div>
   <div class="row">
     <!-- <div class="col"> -->
-      <div id="old_stats" class="col hide">
+      <div id="old_stats" class="col hide" style="overflow:scroll; height:65vh; overflow-x:hidden;">
         {% include 'components/stats.html' %}
       </div>
     <!-- </div> -->
   </div>
 </div>
-<script type="text/javascript" src="/static/js/home.js"></script>
+<script type="text/javascript" src="/static/js/history.js"></script>
 <script type="text/javascript" src="/static/js/stats.js"></script>
 
 {% endblock %}
