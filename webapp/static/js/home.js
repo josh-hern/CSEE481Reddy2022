@@ -10,8 +10,8 @@ document.getElementById('join-game').addEventListener('click', (e) => {
 })
 
 const startGame = () => {
-  document.getElementById('player-name').value == "" ? document.getElementById('player-name').value = "Bingus" : ""
-  let name = document.getElementById('player-name').value == "" ? "Bingus" : document.getElementById('player-name').value
+  document.getElementById('player-name').value == "" ? document.getElementById('player-name').value = "testName" : ""
+  let name = document.getElementById('player-name').value == "" ? "testName" : document.getElementById('player-name').value
   document.getElementById('name-area').classList.add('hide');
   document.getElementById('command').classList.remove('hide');
 
@@ -22,8 +22,8 @@ const startGame = () => {
 }
 
 const joinGame = async () => {
-  document.getElementById('player-name').value == "" ? document.getElementById('player-name').value = "Bingus" : ""
-  let name = document.getElementById('player-name').value == "" ? "Bingus" : document.getElementById('player-name').value
+  document.getElementById('player-name').value == "" ? document.getElementById('player-name').value = "testName" : ""
+  let name = document.getElementById('player-name').value == "" ? "testName" : document.getElementById('player-name').value
   let code = document.getElementById('game-code-input').value
   document.getElementById('header-text').innerHTML = "Game Code: " + code
   document.getElementById('game-code').value = code
