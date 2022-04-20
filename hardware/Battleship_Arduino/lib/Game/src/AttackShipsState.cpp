@@ -29,6 +29,10 @@ AttackShipsState::AttackShipsState(Board* game_board){
     player_color_palette->ship_base = COLOR_GRAY;
     player_color_palette->ship_hit = COLOR_SELECTED;
     player_color_palette->ship_sunk = COLOR_DARK_RED;
+
+    opponent_color_palette = new ShipColorPalette();
+    opponent_color_palette->ship_hit = COLOR_SELECTED;
+    opponent_color_palette->ship_sunk = COLOR_DARK_RED;
 }
 
 void AttackShipsState::draw(){
@@ -40,6 +44,7 @@ void AttackShipsState::activate(UserInputs* inputs){
     attachInterrupts(inputs);
     Serial.println("Setting color palette");
     board->player_fleet->setColorPalette(player_color_palette);
+    board->opponent_fleet->setColorPalette(opponent_color_palette);
     Serial.println("Color palette set");
     board->opponent_grid->selectCell(cursor_position);
 }
@@ -71,6 +76,7 @@ void AttackShipsState::attack(){
     // else, there is no ship there.
     grid_cell->setValue(COLOR_DARK_BLUE);
     selected_cell->markHit();
+    Serial.println("Returning from interrupt");
 
 }
 void AttackShipsState::moveUp(){

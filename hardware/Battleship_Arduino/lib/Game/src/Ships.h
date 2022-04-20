@@ -47,7 +47,7 @@ class Ship{
         uint8_t rotation;
         Coordinates position;
         TemporalCell** ship_cells; //pointer to array with len = length
-        uint8_t* hit_index; // pointer to array where hit indices are != 0
+        bool* hit_index; // pointer to array where hit indices are != 0
         Vector ROTATIONS[4];
         ShipColorPalette* color_palette;
         void initialize_rotations();

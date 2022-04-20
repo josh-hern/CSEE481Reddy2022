@@ -8,10 +8,10 @@ Ship::Ship(uint8_t ship_length, Grid* grid_canvas){
     rotation = 0;
     position = Coordinates {0,0};
     ship_cells = (TemporalCell**) malloc(sizeof(TemporalCell*) * ship_length);
-    hit_index = (uint8_t*) malloc(sizeof(uint8_t) * ship_length);    
+    hit_index = new bool[length];    
     for(int i=0; i<length; i++){
         ship_cells[i] = NULL;
-        hit_index[i] = 0;
+        hit_index[i] = false;
     }
     color_palette = new ShipColorPalette();
 
@@ -182,7 +182,7 @@ bool Ship::indexHit(uint8_t index){
     if(index >= length){ //return if out of bounds
         return false;
     }
-    return hit_index[index] != 0; // if not 0, it's been hit.
+    return hit_index[index];
 }
 
 bool Ship::coordinatesHit(Coordinates coords){
@@ -202,8 +202,7 @@ bool Ship::isSunk(){
 // if the coordinates are not on the ship, return -1.
 int8_t Ship::getShipIndexFromCoords(Coordinates coords){
     Coordinates ship_coords[length];
-    getShipCellCoordinates(coords.x, coords.y, ship_coords);
-
+    getShipCellCoordinates(position.x, position.y, ship_coords);
     for(uint8_t i=0; i<length; i++){
         if(ship_coords[i] == coords){
             return i; // this is the index we're looking for!
@@ -222,8 +221,11 @@ void Ship::attackCoordinates(Coordinates coords){
         Serial.println("Error! index returned was greater than ship allows");
         return;
     }
-
+    // Serial.printf("Address of this %s: %X\n", ship_type, this);
+    // Serial.printf("Address of hit_index: %X\n", hit_index);
+    // Serial.printf("Marking index %d hit on %s\n", index, ship_type);
     hit_index[index] = true;
+    // Serial.printf("Reading back marked value: %d\n", hit_index[index]);
 }
 
 void Ship::getShipCellCoordinates(int8_t x, int8_t y, Coordinates dest[]){
@@ -251,6 +253,8 @@ void Ship::blit(){
     bool fits = fitsAt(position.x, position.y);
     bool placing = (color_palette->ship_hit == 0);
     bool sunk = isSunk();
+    // Serial.printf("Address of this %s: %X\n", ship_type, this);
+    // Serial.printf("Address of hit_index for ship %s: %X\n", ship_type, hit_index);
     for(int i=0; i<length; i++){
         // TODO: simplify this
         Coordinates c = ship_coordinates[i];
@@ -259,8 +263,12 @@ void Ship::blit(){
 
         uint16_t value = (fits)? color_palette->ship_fits : color_palette->ship_doesnt_fit;
         if(!placing){
+            // Serial.printf("%s reports %d for being hit at %d\n", ship_type, indexHit(i), i);
             if(sunk) value = color_palette->ship_sunk;
-            else if(indexHit(i)) value = color_palette->ship_hit;
+            else if(indexHit(i)){ 
+                // Serial.printf("Blitting index %d as %X on %s\n", i, color_palette->ship_hit, ship_type);
+                value = color_palette->ship_hit;
+            }
             else value = color_palette->ship_base;
         }
         if(value == 0) value = COLOR_LIGHT_BLUE;

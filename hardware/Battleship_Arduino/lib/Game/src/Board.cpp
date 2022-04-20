@@ -14,9 +14,11 @@ void Board::draw(){
     opponent_grid->draw();
     player_grid->draw();
 
-    player_fleet->carrier->blit();
-    player_fleet->battleship->blit();
-    player_fleet->destroyer->blit();
-    player_fleet->submarine->blit();
-    player_fleet->patrolboat->blit();
+    opponent_fleet->blit();
+    player_fleet->blit();
+    // player_fleet->carrier->blit();
+    // player_fleet->battleship->blit();
+    // player_fleet->destroyer->blit();
+    // player_fleet->submarine->blit();
+    // player_fleet->patrolboat->blit();
 }
