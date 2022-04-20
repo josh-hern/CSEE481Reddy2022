@@ -1,32 +1,30 @@
 #pragma once
 
-#ifndef PLACESHIPSSTATE_H
-#define PLACESHIPSSTATE_H
+#ifndef ATTACKSHIPSSTATE_H
+#define ATTACKSHIPSSTATE_H
 
 #include "GameState.h"
 #include "Grid.h"
 #include "Ships.h"
 #include "Coordinates.h"
 
-class PlaceShipsState: public GameState{
+class AttackShipsState: public GameState{
 
     public:
-        PlaceShipsState(Board* game_board);
+        AttackShipsState(Board* game_board);
         void draw();
         void activate(UserInputs* inputs);
-        void rotateShip();
-        void pickUpShip();
+        void attack();
         void moveUp();
         void moveDown();
         void moveLeft();
         void moveRight();
+        
     private:
         void attachInterrupts(UserInputs* inputs);
         Board* board;
         Coordinates cursor_position;
-        uint8_t rotation;
 
 };
-
 
 #endif

@@ -1,6 +1,5 @@
 #include "Ships.h"
 #include <Arduino.h>
-#include <typeinfo>
 
 Ship::Ship(uint8_t ship_length, Grid* grid_canvas){
     initialize_rotations();
@@ -9,9 +8,13 @@ Ship::Ship(uint8_t ship_length, Grid* grid_canvas){
     rotation = 0;
     position = Coordinates {0,0};
     ship_cells = (TemporalCell**) malloc(sizeof(TemporalCell*) * ship_length);
+    hit_index = (uint8_t*) malloc(sizeof(uint8_t) * ship_length);    
     for(int i=0; i<length; i++){
         ship_cells[i] = NULL;
+        hit_index[i] = 0;
     }
+    color_palette = new ShipColorPalette();
+
 }
 
 void Ship::initialize_rotations(){
@@ -118,6 +121,7 @@ bool Ship::fitsAt(int8_t x, int8_t y){
 
     for (uint8_t i=0; i<length; i++){
         Coordinates c = ship_coords[i];
+        // TODO: check that coordinates are not NULL
         TemporalCell* cell = grid->getCell(c.x, c.y);
         if(cell == NULL){
             Serial.printf("Does not fit because cell is null for %s\n", ship_type);
@@ -129,11 +133,7 @@ bool Ship::fitsAt(int8_t x, int8_t y){
                 cell->location.x, cell->location.y);
             return false;
         }
-        // if(cell->occupyingShip != NULL){
-        //     Serial.printf("Ship may fit, %s occupies this cell:\n"
-        //     "\tx: %d\n\ty: %d\n", cell->occupyingShip->ship_type,
-        //     cell->location.x, cell->location.y);
-        // }
+
     }
 
     uint8_t num_adjacent_cells = (length * 2) + 6; // 6 because can't be diagonal
@@ -178,6 +178,54 @@ bool Ship::fitsAt(int8_t x, int8_t y){
     return true;
 }
 
+bool Ship::indexHit(uint8_t index){
+    if(index >= length){ //return if out of bounds
+        return false;
+    }
+    return hit_index[index] != 0; // if not 0, it's been hit.
+}
+
+bool Ship::coordinatesHit(Coordinates coords){
+    int8_t index = getShipIndexFromCoords(coords);
+    if(index < 0 || index > length) return false;
+    return indexHit(index);
+}
+
+bool Ship::isSunk(){
+    for(uint8_t i=0; i<length; i++){
+        if(!indexHit(i)) return false;
+    }
+    return true;
+}
+
+// get the index of the ship that the passed coordinates are located on.
+// if the coordinates are not on the ship, return -1.
+int8_t Ship::getShipIndexFromCoords(Coordinates coords){
+    Coordinates ship_coords[length];
+    getShipCellCoordinates(coords.x, coords.y, ship_coords);
+
+    for(uint8_t i=0; i<length; i++){
+        if(ship_coords[i] == coords){
+            return i; // this is the index we're looking for!
+        }
+    }
+
+    return -1; // coordinates weren't on the ship
+}
+
+void Ship::attackCoordinates(Coordinates coords){
+    int8_t index = getShipIndexFromCoords(coords);
+    if(index < 0){
+        Serial.println("Error! Coordinates were not on the attacked ship but should have been");
+        return;
+    } else if(index >= length){
+        Serial.println("Error! index returned was greater than ship allows");
+        return;
+    }
+
+    hit_index[index] = true;
+}
+
 void Ship::getShipCellCoordinates(int8_t x, int8_t y, Coordinates dest[]){
     Vector current_rotation = ROTATIONS[rotation];
     for(uint8_t i=0; i<length; i++){
@@ -201,17 +249,30 @@ void Ship::blit(){
     Coordinates ship_coordinates[length];
     getShipCellCoordinates(position.x, position.y, ship_coordinates);
     bool fits = fitsAt(position.x, position.y);
+    bool placing = (color_palette->ship_hit == 0);
+    bool sunk = isSunk();
     for(int i=0; i<length; i++){
+        // TODO: simplify this
         Coordinates c = ship_coordinates[i];
         TemporalCell* cell = grid->getCell(c.x, c.y);
         ship_cells[i] = cell;
-        uint16_t value = (fits)? COLOR_GREEN : COLOR_DOESNT_FIT;
+
+        uint16_t value = (fits)? color_palette->ship_fits : color_palette->ship_doesnt_fit;
+        if(!placing){
+            if(sunk) value = color_palette->ship_sunk;
+            else if(indexHit(i)) value = color_palette->ship_hit;
+            else value = color_palette->ship_base;
+        }
+        if(value == 0) value = COLOR_LIGHT_BLUE;
+
         if(cell != NULL){
             cell->setValue(value);
             grid->drawCell(cell);
         }
     }
 }
+
+
 
 void Ship::unblit(){
     
@@ -223,6 +284,16 @@ void Ship::unblit(){
             Serial.printf("Error: cell value was NULL for ship %s\n", ship_type);
         }
     }
+}
+
+void Ship::setColorPalette(ShipColorPalette* palette){
+    Serial.printf("Setting palette for %s\n", ship_type);
+    color_palette->ship_fits         = palette->ship_fits;
+    color_palette->ship_doesnt_fit   = palette->ship_doesnt_fit;
+    color_palette->ship_base         = palette->ship_base;
+    color_palette->ship_hit          = palette->ship_hit;
+    color_palette->ship_sunk         = palette->ship_sunk;
+
 }
 
 
@@ -252,4 +323,21 @@ Fleet::Fleet(FleetConfiguration* conf, Grid* grid){
     patrolboat->placeOnGrid(conf->patrolboat_conf->location);
 
     Serial.println("Fleet placed");
+}
+
+void Fleet::blit(){
+    carrier->blit();
+    battleship->blit();
+    destroyer->blit();
+    submarine->blit();
+    patrolboat->blit();
+}
+
+void Fleet::setColorPalette(ShipColorPalette* palette){
+    carrier->setColorPalette(palette);
+    battleship->setColorPalette(palette);
+    destroyer->setColorPalette(palette);
+    submarine->setColorPalette(palette);
+    patrolboat->setColorPalette(palette);
+
 }

@@ -5,33 +5,17 @@
 
 #include <Arduino.h>
 #include <Adafruit_ST7789.h>
+#include "Coordinates.h"
 
 class Ship;
 
 #define COLOR_LIGHT_BLUE        0x4c78
+#define COLOR_DARK_BLUE         0x3994
 #define COLOR_SELECTED          0xF800
 #define COLOR_GREEN             0x07e0
+#define COLOR_GRAY              0x4229
+#define COLOR_DARK_RED          0x7000
 #define COLOR_DOESNT_FIT        COLOR_SELECTED
-
-class Coordinates{
-    public:
-        int8_t x;
-        int8_t y;
-
-        Coordinates operator+(Coordinates other){
-            return Coordinates{
-                (int8_t)(x + other.x),
-                (int8_t)(y + other.y)
-             };
-        }
-
-        Coordinates operator-(Coordinates other){
-            return Coordinates{
-                (int8_t)(x - other.x),
-                (int8_t)(y - other.y)
-             };
-        }
-};
 
 class TemporalCell{
     public:
@@ -91,7 +75,7 @@ class Grid{
     public:
         Grid(uint8_t x, uint8_t y, Adafruit_ST7789* tft, uint8_t scale);
         void draw();
-        void selectCell(uint8_t x, uint8_t y);
+        void selectCell(Coordinates coords);
         TemporalCell* getCell(int8_t x, int8_t y);
         void drawCell(TemporalCell* value);
 

@@ -8,6 +8,8 @@
 #include "Ships.h"
 #include "Board.h"
 #include "GameState.h"
+#include "PlaceShipsState.h"
+#include "AttackShipsState.h"
 #include "Input.h"
 
 

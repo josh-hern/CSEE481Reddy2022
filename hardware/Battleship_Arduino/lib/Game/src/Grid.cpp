@@ -26,14 +26,14 @@ void Grid::draw(){
     } 
 }
 
-void Grid::selectCell(uint8_t x, uint8_t y){
+void Grid::selectCell(Coordinates coords){
     if(selectedCell != NULL){
         TemporalCell* prev_selected = selectedCell;
         prev_selected->deselect();
         drawCell(prev_selected);
     }
-    if(x > 9 || y > 9) return;
-    selectedCell = grid[x][y];
+    if(coords.x > 9 || coords.y > 9 || coords.x < 0 || coords.y < 0) return;
+    selectedCell = grid[coords.x][coords.y];
     selectedCell->select();
     drawCell(selectedCell);
 }

@@ -32,10 +32,20 @@ PlaceShipsState::PlaceShipsState(Board* game_board){
     board = game_board;
     cursor_position = {4, 4};
     rotation = 0;
+    player_color_palette = new ShipColorPalette();
+
+    player_color_palette->ship_base = COLOR_GRAY;
+    player_color_palette->ship_hit = COLOR_DOESNT_FIT;
+
 }
 
 void PlaceShipsState::draw(){
     board->draw();
+}
+
+void PlaceShipsState::activate(UserInputs* inputs){
+    attachInterrupts(inputs);
+    board->player_fleet->setColorPalette(player_color_palette);
 }
 
 void PlaceShipsState::attachInterrupts(UserInputs* inputs){
@@ -49,7 +59,7 @@ void PlaceShipsState::attachInterrupts(UserInputs* inputs){
 
 void PlaceShipsState::rotateShip(){
     rotation = (rotation + 1) % 4;
-    board->fleet->carrier->setRotation(rotation);
+    board->player_fleet->carrier->setRotation(rotation);
 }
 
 void PlaceShipsState::pickUpShip(){
@@ -59,27 +69,27 @@ void PlaceShipsState::pickUpShip(){
 void PlaceShipsState::moveUp(){
     if(cursor_position.y > 0){
         cursor_position.y--;
-        board->fleet->carrier->setPosition(cursor_position);
+        board->player_fleet->carrier->setPosition(cursor_position);
     }
 }
 
 void PlaceShipsState::moveDown(){
     if(cursor_position.y < 9){
         cursor_position.y++;
-        board->fleet->carrier->setPosition(cursor_position);
+        board->player_fleet->carrier->setPosition(cursor_position);
     }
 }
 
 void PlaceShipsState::moveLeft(){
     if(cursor_position.x > 0){
         cursor_position.x--;
-        board->fleet->carrier->setPosition(cursor_position);
+        board->player_fleet->carrier->setPosition(cursor_position);
     }
 }
 
 void PlaceShipsState::moveRight(){
     if(cursor_position.x < 9){
         cursor_position.x++;
-        board->fleet->carrier->setPosition(cursor_position);
+        board->player_fleet->carrier->setPosition(cursor_position);
     }
 }
