@@ -5,6 +5,13 @@ document.getElementById('start-web').addEventListener('click', (e) => {
   startGame()
 })
 
+document.getElementById('start-board').addEventListener('click', (e) => {
+  document.getElementById('start-game-prompt').classList.add('hide');
+  document.getElementById('my-board').classList.remove('hide');
+  document.getElementById('command').classList.remove('hide');
+  startBoardGame()
+})
+
 document.getElementById('join-game').addEventListener('click', (e) => {
   joinGame()
 })
@@ -16,6 +23,18 @@ const startGame = () => {
   document.getElementById('command').classList.remove('hide');
 
   postData('/api/start_game', {"name": name}).then(data => {
+    document.getElementById('header-text').innerHTML = "Game Code: " + data
+    document.getElementById('game-code').value = data
+  })
+}
+
+const startBoardGame = () => {
+  document.getElementById('player-name').value == "" ? document.getElementById('player-name').value = "testName" : ""
+  let name = document.getElementById('player-name').value == "" ? "testName" : document.getElementById('player-name').value
+  document.getElementById('name-area').classList.add('hide');
+  document.getElementById('command').classList.remove('hide');
+
+  postData('/api/start_board_game', {"name": name}).then(data => {
     document.getElementById('header-text').innerHTML = "Game Code: " + data
     document.getElementById('game-code').value = data
   })

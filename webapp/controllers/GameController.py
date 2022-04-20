@@ -13,6 +13,17 @@ def start_new_game(player1_name):
     return game.Code
 
 
+def start_new_board_game(player1_name):
+    game = Game.create_game(player1_name)
+
+    board2 = Board.create_board(game.id, "COMPUTE")
+    game = Game.update(game.id, {'Board2': board2.id})
+
+    game = Game.update(game.id, {'Code': 'HARDWARE'})
+
+    return game.Code
+
+
 def join_from_web(game_code, player):
     game = Game.get_by_access_code(game_code)
     if game.Board2 is None:
@@ -68,10 +79,11 @@ def place_ship(game_code, position, ship_type, rotate, player):
     game = Game.get_by_access_code(game_code)
     board = get_board(game, player)
 
-    test = Ship.add_ship(game, ship_type, board, position, rotate)
+    Ship.add_ship(game, ship_type, board, position, rotate)
 
-    raw_spaces = OccupiedSpaces.get_by_board(board.id)
-    return build_dict_list(raw_spaces)
+    confirm_setup(game_code, player)
+
+    return check_game_status(game_code, player)
 
 
 def build_dict_list(raw_spaces):
@@ -97,10 +109,13 @@ def check_game_status(game_code, player):
     board = get_board(game, player)
     enemy_board = None
 
-    try:
-        enemy_board = get_enemy_board(game, player)
-    except WhatTheFuckException():
-        pass
+    if game_code == "HARDWARE" and player == "COMPUTE":
+        enemy_board = Board.get_by_id(game.Board1)
+    else:
+        try:
+            enemy_board = get_enemy_board(game, player)
+        except WhatTheFuckException():
+            pass
 
     status = {
         'ready': (True if (enemy_board and board.isSetup and enemy_board.isSetup) else False),

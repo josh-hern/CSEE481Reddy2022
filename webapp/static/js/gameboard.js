@@ -172,7 +172,7 @@ const pushShipToObject = (cell, shipName, shipLength) => {
     'code': document.querySelector('#game-code').value});
 
   postData('/api/place_ship', s).then(data => {
-    buildBoard("my-board", data);
+    buildBoard("my-board", data['player-board']['occupied-spaces']);
     confirmSetup()
   })
 }
@@ -266,7 +266,6 @@ const confirmSetup = (game, player) => {
 
 const allowAttack = () => {
   allCells = document.querySelectorAll("#enemy-board td.table-cell");
-  console.log(allCells);
   allCells.forEach((cell) => {
     cell.addEventListener('mouseover', () => {highlightSpaces(cell, 1)})
     cell.addEventListener('mouseout', () => {unHighlightSpaces(cell, 1)})

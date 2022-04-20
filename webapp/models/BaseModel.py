@@ -42,8 +42,12 @@ class BaseModel:
             raise InvalidUpdateException()
 
     def as_dict(self):
-        return {c.name: str(getattr(self, c.name)) for c in self.__table__.columns}
+        as_dict = dict()
+        for c in self.__table__.columns:
+            if c.name != "created_at" and c.name != 'updated_at':
+                as_dict[c.name] = str(getattr(self, c.name))
 
+        return as_dict
 
 class InvalidUpdateException(BaseException):
     pass

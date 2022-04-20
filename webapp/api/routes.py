@@ -48,6 +48,13 @@ def start_new_game_route():
     return json.dumps(response)
 
 
+@api.route('/api/start_board_game', methods=['POST'])
+def start_new_board_game_route():
+    request_json = request.get_json()
+    response = start_new_board_game(request_json['name'])
+    return json.dumps(response)
+
+
 @api.route('/api/confirm_setup', methods=['POST'])
 def confirm_setup_route():
     request_json = request.get_json()

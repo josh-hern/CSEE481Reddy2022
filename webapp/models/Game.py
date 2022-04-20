@@ -39,7 +39,7 @@ class Game(Base, BaseModel):
     def get_by_access_code(cls, code):
         game = None
         with Database.get_session() as session:
-            game = session.query(cls).filter(cls.Code == code).first()
+            game = session.query(cls).filter(cls.Code == code).order_by(cls.id.desc()).first()
 
         return game
 
