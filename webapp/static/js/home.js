@@ -1,3 +1,8 @@
+
+colors = {
+  "pastel": ["#9b5de5", "#f15bb5", "#fee440", "#00bbf9", "#00f5d4"]
+};
+
 document.getElementById('start-web').addEventListener('click', (e) => {
   document.getElementById('start-game-prompt').classList.add('hide');
   document.getElementById('my-board').classList.remove('hide');
@@ -10,6 +15,16 @@ document.getElementById('start-board').addEventListener('click', (e) => {
   document.getElementById('my-board').classList.remove('hide');
   document.getElementById('command').classList.remove('hide');
   startBoardGame()
+})
+
+nightmare = false
+document.getElementById('nightmare').addEventListener('change', (e) => {
+  nightmare = true
+  document.getElementsByClassName('page-wrapper')[0].style.backgroundImage = null;
+  strobeBackgroundElement(document.getElementsByClassName('page-wrapper')[0])
+  Array.from(document.getElementsByClassName('has-text')).forEach(item => {
+    colorizeText(item);
+  })
 })
 
 document.getElementById('join-game').addEventListener('click', (e) => {
@@ -38,6 +53,52 @@ const startBoardGame = () => {
     document.getElementById('header-text').innerHTML = "Game Code: " + data
     document.getElementById('game-code').value = data
   })
+}
+
+
+const strobeElement = (element, offset) => {
+  length = (Math.random() * 100)
+  element.style.color = colors['pastel'][Math.floor(Math.random() * colors['pastel'].length)]
+  setTimeout(() => {
+    strobeElement(element, offset);
+  }, length);
+}
+
+const strobeBackgroundElement = (element) => {
+
+  length = (Math.random() * 100)
+  element.style.backgroundColor = colors['pastel'][Math.floor(Math.random() * colors['pastel'].length)]
+  setTimeout(() => {
+    strobeBackgroundElement(element);
+  }, length);
+}
+
+const now = () => {
+  return ((new Date()).getMilliseconds()/800)*10
+}
+
+const moveElement = (element, offset) => {
+  element.style.bottom = Math.sin(10*(now()/(2*Math.PI))+offset) * 10  + "px"
+  setTimeout(() => {
+    moveElement(element, offset);
+  }, 10);
+}
+
+const colorizeText = (element) => {
+  oldText = element.innerHTML
+  element.innerHTML = ''
+  runningWidth = 0;
+  for(let i=0; i<oldText.length; i++) {
+    offset = (i/oldText.length)*20
+    let ele = document.createElement('span')
+    ele.style.position = 'relative'
+    ele.innerHTML = oldText[i];
+    element.appendChild(ele);
+
+
+    strobeElement(ele);
+    moveElement(ele, offset)
+  }
 }
 
 const joinGame = async () => {
