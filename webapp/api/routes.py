@@ -46,7 +46,10 @@ def test():
 #   - (object) status
 @api.route('/api/place_ship', methods=['POST'])
 def add_ship_position():
-    request_json = json.loads(request.get_json())
+    request_json = request.get_json()
+    if type(request_json) == str:
+        request_json = json.loads(request_json)
+
     new_board = place_ship(request_json['code'], request_json['position'], request_json['ship_type'], request_json['rotate'], request_json['player'])
     return json.dumps(new_board)
 
@@ -95,6 +98,9 @@ def confirm_setup_route():
 @api.route('/api/join_from_web', methods=['POST'])
 def join_from_web_route():
     request_json = request.get_json()
+    if type(request) == str:
+        request_json = json.loads(request_json)
+
     response = join_from_web(request_json['code'], request_json['name'])
     return json.dumps(response)
 
@@ -108,6 +114,9 @@ def join_from_web_route():
 @api.route('/api/check_game_status', methods=['POST'])
 def check_game_status_route():
     request_json = request.get_json()
+    if type(request_json) == str:
+        request_json = json.loads(request_json)
+
     response = check_game_status(request_json['code'], request_json['name']);
     return json.dumps(response)
 
@@ -121,6 +130,9 @@ def check_game_status_route():
 @api.route('/api/attack_space', methods=['POST'])
 def attack_space_route():
     request_json = request.get_json()
+    if type(request_json) == str:
+        request_json = json.loads(request_json)
+
     response = attack_ship(request_json['code'], request_json['name'], request_json['cell']);
     return json.dumps(response)
 
@@ -128,5 +140,8 @@ def attack_space_route():
 @api.route('/api/check_stats', methods=['POST'])
 def check_stats_route():
     request_json = request.get_json()
+    if type(request_json) == str:
+        request_json = json.loads(request_json)
+
     response = check_stats(request_json['name'])
     return json.dumps(response, default=str)
